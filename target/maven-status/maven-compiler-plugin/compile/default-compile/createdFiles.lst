@@ -1,0 +1,8 @@
+com/kindconnect/model/User.class
+com/kindconnect/service/AuthService.class
+com/kindconnect/dto/RegisterRequest.class
+com/kindconnect/controller/AuthController.class
+com/kindconnect/dto/AuthResponse.class
+com/kindconnect/KindConnectApplication.class
+com/kindconnect/dto/LoginRequest.class
+com/kindconnect/repository/UserRepository.class
