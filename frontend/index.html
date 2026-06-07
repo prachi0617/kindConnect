@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KindConnect AI</title>
+    <title>KindConnect</title>
 
     <style>
         * {
@@ -53,7 +53,7 @@
             margin: 0;
             color: #0b3b8f;
             font-family: Georgia, serif;
-            font-size: 28px;
+            font-size: 30px;
         }
 
         .logo p {
@@ -85,139 +85,6 @@
             box-shadow: 0 6px 16px rgba(109, 78, 232, 0.3);
         }
 
-        .hero {
-            display: grid;
-            grid-template-columns: 1fr 1.1fr 1fr;
-            gap: 30px;
-            padding: 30px 60px 45px;
-            background: linear-gradient(90deg, #eaf8ff, #f8fbff);
-            align-items: center;
-        }
-
-        .hero-image {
-            min-height: 240px;
-            background: #dff3ff;
-            border-radius: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: #102044;
-            font-size: 20px;
-        }
-
-        .hero-text h2 {
-            font-size: 46px;
-            line-height: 1.08;
-            margin: 0 0 18px;
-            font-family: Georgia, serif;
-            color: #08245c;
-        }
-
-        .hero-text span {
-            color: #6d4ee8;
-        }
-
-        .hero-text p {
-            font-size: 18px;
-            line-height: 1.5;
-            margin-bottom: 25px;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 14px;
-        }
-
-        .primary-btn,
-        .outline-btn {
-            border-radius: 12px;
-            padding: 16px 26px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .primary-btn {
-            background: #2563eb;
-            color: white;
-            border: none;
-        }
-
-        .outline-btn {
-            background: white;
-            color: #6d4ee8;
-            border: 2px solid #8b6df6;
-        }
-
-        .chat-card {
-            background: white;
-            border-radius: 22px;
-            padding: 24px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-        }
-
-        .chat-top {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-        }
-
-        .bot {
-            width: 72px;
-            height: 72px;
-            border-radius: 18px;
-            background: #dbeafe;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 35px;
-        }
-
-        .chat-card h3 {
-            margin: 5px 0 8px;
-        }
-
-        .quick-buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .quick-buttons button {
-            border: 1px solid #d5deef;
-            background: white;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .chat-input {
-            margin-top: 18px;
-            display: flex;
-            border: 1px solid #d5deef;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .chat-input input {
-            flex: 1;
-            border: none;
-            padding: 15px;
-            outline: none;
-        }
-
-        .chat-input button {
-            width: 62px;
-            border: none;
-            background: #7c3aed;
-            color: white;
-            font-size: 22px;
-            cursor: pointer;
-        }
-
         .main {
             padding: 35px 60px;
         }
@@ -230,22 +97,22 @@
 
         h2.section-title {
             font-family: Georgia, serif;
-            font-size: 32px;
-            margin: 0 0 18px;
+            font-size: 36px;
+            margin: 0 0 22px;
             color: #08245c;
         }
 
         .feature-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
         }
 
         .feature-card {
             background: white;
             border-radius: 14px;
-            padding: 22px;
-            min-height: 165px;
+            padding: 24px;
+            min-height: 185px;
             box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
             cursor: pointer;
             transition: 0.2s;
@@ -258,25 +125,27 @@
         }
 
         .icon-circle {
-            width: 58px;
-            height: 58px;
+            width: 62px;
+            height: 62px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            margin-bottom: 14px;
+            font-size: 30px;
+            margin-bottom: 16px;
             background: #eaf1ff;
         }
 
         .feature-card h3 {
-            margin: 0 0 10px;
+            margin: 0 0 12px;
+            font-size: 21px;
         }
 
         .feature-card p {
             margin: 0;
             line-height: 1.45;
             color: #334466;
+            font-size: 17px;
         }
 
         .dashboard {
@@ -295,11 +164,22 @@
             padding-bottom: 18px;
         }
 
+        .refresh-btn,
+        .done-btn {
+            background: #2f9e44;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 9px 18px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
         .dash-body {
             display: grid;
             grid-template-columns: 150px 1fr;
             gap: 20px;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .side-menu button {
@@ -321,7 +201,7 @@
         .task-row {
             background: #17294d;
             display: grid;
-            grid-template-columns: 52px 1fr 90px 90px;
+            grid-template-columns: 52px 1fr 110px 90px;
             gap: 12px;
             align-items: center;
             padding: 14px;
@@ -339,22 +219,18 @@
             justify-content: center;
         }
 
-        .done-btn {
-            background: #2f9e44;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-weight: bold;
+        .resources-ai-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 0.9fr;
+            gap: 28px;
+            margin-top: 35px;
         }
 
         .resources-box,
         .volunteer-box {
             background: white;
             border-radius: 16px;
-            padding: 22px;
-            margin-top: 28px;
+            padding: 25px;
             box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
         }
 
@@ -366,10 +242,10 @@
         }
 
         .resource-item {
-            width: 92px;
+            width: 105px;
             background: #f3f6ff;
             border-radius: 12px;
-            padding: 13px;
+            padding: 15px;
             text-align: center;
             cursor: pointer;
             font-weight: bold;
@@ -381,22 +257,133 @@
             margin-bottom: 8px;
         }
 
-        .explore-link {
+        .ai-chat-card {
+            background: linear-gradient(160deg, #ffffff, #eef4ff);
+            border-radius: 24px;
+            padding: 26px;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.18);
+            border: 1px solid #dbeafe;
+        }
+
+        .ai-chat-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .ai-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.25);
+        }
+
+        .ai-chat-card h2 {
+            margin: 0 0 6px;
+            font-family: Georgia, serif;
+            color: #08245c;
+            font-size: 26px;
+        }
+
+        .ai-chat-card p {
+            margin: 0;
+            color: #334466;
+            line-height: 1.4;
+        }
+
+        .ai-message {
+            padding: 14px 16px;
+            border-radius: 16px;
+            line-height: 1.45;
+            margin: 16px 0;
+            font-size: 15px;
+        }
+
+        .bot-message {
+            background: #eaf1ff;
+            color: #102044;
+            border-top-left-radius: 4px;
+        }
+
+        .ai-chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .ai-chip-row button {
+            border: none;
+            background: #ffffff;
             color: #2563eb;
+            border-radius: 999px;
+            padding: 10px 14px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 18px;
-            display: inline-block;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .ai-chip-row button:hover {
+            background: #dbeafe;
+        }
+
+        .ai-input-row {
+            display: grid;
+            grid-template-columns: 1fr 54px;
+            gap: 10px;
+            align-items: stretch;
+        }
+
+        .ai-input-row textarea {
+            width: 100%;
+            min-height: 95px;
+            border: 1px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 13px;
+            font-size: 15px;
+            outline: none;
+            resize: vertical;
+        }
+
+        .ai-input-row button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            border-radius: 14px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .ai-result-box {
+            margin-top: 16px;
+            background: #f0fdf4;
+            border-left: 5px solid #22c55e;
+            padding: 14px;
+            border-radius: 12px;
+            color: #102044;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .volunteer-box {
+            margin-top: 35px;
         }
 
         .volunteer-cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
+            gap: 18px;
         }
 
         .volunteer-card {
-            padding: 18px;
+            padding: 20px;
             border-radius: 14px;
             cursor: pointer;
         }
@@ -413,29 +400,24 @@
             background: #eaf3ff;
         }
 
-        .cta {
-            margin: 35px 0 20px;
-            background: #fff2cc;
-            border-radius: 18px;
-            padding: 28px 45px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .ai-float-btn {
+            position: fixed;
+            right: 28px;
+            bottom: 28px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            box-shadow: 0 10px 28px rgba(37, 99, 235, 0.35);
+            z-index: 100;
         }
 
-        .cta h2 {
-            margin: 0 0 8px;
-            font-family: Georgia, serif;
-            color: #08245c;
-        }
-
-        footer {
-            background: white;
-            padding: 25px 60px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+        .ai-float-btn:hover {
+            transform: scale(1.08);
         }
 
         .modal-bg {
@@ -526,6 +508,8 @@
             padding: 12px 18px;
             cursor: pointer;
             font-weight: bold;
+            margin-right: 8px;
+            margin-bottom: 8px;
         }
 
         .result-box {
@@ -536,20 +520,29 @@
             border-radius: 8px;
             white-space: pre-wrap;
             font-size: 14px;
+            color: #102044;
+        }
+
+        footer {
+            margin-top: 35px;
+            background: white;
+            padding: 25px 60px;
+            text-align: center;
+            color: #334466;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
         }
 
         @media (max-width: 1000px) {
 
             header,
-            .hero,
             .main,
             footer {
                 padding-left: 20px;
                 padding-right: 20px;
             }
 
-            .hero,
-            .grid-layout {
+            .grid-layout,
+            .resources-ai-layout {
                 grid-template-columns: 1fr;
             }
 
@@ -570,11 +563,12 @@
 </head>
 
 <body>
+
     <header>
         <div class="logo">
             <div class="logo-circle">💙</div>
             <div>
-                <h1>KindConnect AI</h1>
+                <h1>KindConnect</h1>
                 <p>Support for Everyone</p>
             </div>
         </div>
@@ -584,70 +578,18 @@
             <a onclick="scrollToSection('dashboard')">Dashboard</a>
             <a onclick="scrollToSection('resources')">Resources</a>
             <a onclick="scrollToSection('volunteer')">Volunteer</a>
-            <button class="login-btn" onclick="openLogin()">Log In</button>
+            <button class="login-btn" onclick="openRegister()">Register / Login</button>
         </nav>
     </header>
 
-    <section class="hero">
-        <div class="hero-image"
-            onclick="openInfo('Family Support', 'KindConnect helps families, seniors, caregivers, and community members find support.')">
-            <div>
-                <div style="font-size:60px;">🤝</div>
-                <p>Family Support</p>
-            </div>
-        </div>
-
-        <div class="hero-text">
-            <h2>Support for Everyone, powered by <span>care and AI.</span></h2>
-            <p>
-                We’re here for seniors, families, caregivers, and people who need support.
-                Find resources, reminders, mood check-ins, and volunteer help.
-            </p>
-            <div class="hero-buttons">
-                <button class="primary-btn" onclick="openHelpRequest('General Help')">♡ I Need Help</button>
-                <button class="outline-btn" onclick="openVolunteerForm()">👥 Become a Volunteer</button>
-            </div>
-        </div>
-
-        <div class="chat-card">
-            <div class="chat-top">
-                <div class="bot">🤖</div>
-                <div>
-                    <h3>Hi there! I’m KindConnect AI 💜</h3>
-                    <p>I can help with reminders, food resources, mood check-ins, appointments, and volunteer support.
-                    </p>
-                    <small>9:30 AM</small>
-                </div>
-            </div>
-
-            <div class="quick-buttons">
-                <button onclick="openReminderForm('Medicine')">💊 Medicine</button>
-                <button onclick="openResourceCategory('Food')">🛍 Food Help</button>
-                <button
-                    onclick="openInfo('Support Info', 'KindConnect can guide users to resources, reminders, and help requests.')">📘
-                    Info</button>
-                <button onclick="openMoodForm()">😊 Mood Check</button>
-            </div>
-
-            <div class="chat-input">
-                <input id="chatMessage" placeholder="Type your message..." />
-                <button onclick="sendSmartChat()">➤</button>
-            </div>
-        </div>
-    </section>
-
     <main class="main">
+
         <div class="grid-layout">
+
             <div id="features">
                 <h2 class="section-title">How KindConnect Helps</h2>
 
                 <div class="feature-grid">
-                    <div class="feature-card" onclick="openChatInfo()">
-                        <div class="icon-circle">🤖</div>
-                        <h3>AI Companion</h3>
-                        <p>Your friendly assistant can guide users to support.</p>
-                    </div>
-
                     <div class="feature-card" onclick="openReminderForm('Medicine')">
                         <div class="icon-circle">🔔</div>
                         <h3>Daily Reminders</h3>
@@ -658,12 +600,6 @@
                         <div class="icon-circle">💜</div>
                         <h3>Mood Check-ins</h3>
                         <p>Record how users feel each day.</p>
-                    </div>
-
-                    <div class="feature-card" onclick="openResourcesAll()">
-                        <div class="icon-circle">📍</div>
-                        <h3>Resource Finder</h3>
-                        <p>Find food, healthcare, transportation, and services.</p>
                     </div>
 
                     <div class="feature-card" onclick="openVolunteerForm()">
@@ -686,7 +622,7 @@
                         <h2>☀️ Daily Dashboard</h2>
                         <p>Good morning! You’ve got this.</p>
                     </div>
-                    <button class="done-btn" onclick="loadDashboardData()">Refresh</button>
+                    <button class="refresh-btn" onclick="loadDashboardData()">Refresh</button>
                 </div>
 
                 <div class="dash-body">
@@ -695,58 +631,85 @@
                         <button onclick="openReminderList()">☑ Tasks</button>
                         <button onclick="openMoodList()">💙 Health</button>
                         <button onclick="openResourcesAll()">📍 Resources</button>
-                        <button onclick="openChatInfo()">✉ Messages</button>
+                        <button onclick="openAIChat()">🤖 AI Chat</button>
                     </div>
 
                     <div>
                         <h2>Today’s Tasks</h2>
                         <div id="dashboardTasks">
-                            <div class="task-row">
-                                <div class="task-icon">💊</div>
-                                <div>
-                                    <strong>Drink water</strong><br>
-                                    <small>Water</small>
-                                </div>
-                                <span>Today</span>
-                                <button class="done-btn">Done</button>
-                            </div>
+                            <p>Loading reminders...</p>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
-        <section id="resources" class="resources-box">
-            <h2 class="section-title">Find Community Resources</h2>
+        <section id="resources" class="resources-ai-layout">
 
-            <div class="resource-row">
-                <div class="resource-item" onclick="openResourceCategory('Food')">
-                    <span class="emoji">🍏</span>Food
+            <div class="resources-box">
+                <h2 class="section-title">Find Community Resources</h2>
+
+                <div class="resource-row">
+                    <div class="resource-item" onclick="openResourceCategory('Food')">
+                        <span class="emoji">🍏</span>Food
+                    </div>
+
+                    <div class="resource-item" onclick="openResourceCategory('Shelter')">
+                        <span class="emoji">🏠</span>Shelter
+                    </div>
+
+                    <div class="resource-item" onclick="openResourceCategory('Healthcare')">
+                        <span class="emoji">⚕️</span>Healthcare
+                    </div>
+
+                    <div class="resource-item" onclick="openResourceCategory('Transportation')">
+                        <span class="emoji">🚗</span>Rides
+                    </div>
+
+                    <div class="resource-item" onclick="openResourceCategory('Caregiver Support')">
+                        <span class="emoji">👥</span>Caregiver
+                    </div>
+
+                    <div class="resource-item" onclick="openResourceCategory('Accessibility')">
+                        <span class="emoji">♿</span>Access
+                    </div>
                 </div>
 
-                <div class="resource-item" onclick="openResourceCategory('Shelter')">
-                    <span class="emoji">🏠</span>Shelter
+                <p>Find local resources and programs in your area.</p>
+                <button class="modal-action" onclick="openResourcesAll()">Explore All Resources</button>
+            </div>
+
+            <div class="ai-chat-card">
+                <div class="ai-chat-top">
+                    <div class="ai-avatar">🤖</div>
+                    <div>
+                        <h2>KindConnect Assistant</h2>
+                        <p>Tell me what you need. I can guide you to the right support.</p>
+                    </div>
                 </div>
 
-                <div class="resource-item" onclick="openResourceCategory('Healthcare')">
-                    <span class="emoji">⚕️</span>Healthcare
+                <div class="ai-message bot-message">
+                    Hi! I can help with food, rides, reminders, mood check-ins, friendly calls, or tech help.
                 </div>
 
-                <div class="resource-item" onclick="openResourceCategory('Transportation')">
-                    <span class="emoji">🚗</span>Rides
+                <div class="ai-chip-row">
+                    <button onclick="fillAIBox('I need food help')">Food</button>
+                    <button onclick="fillAIBox('I need a ride')">Ride</button>
+                    <button onclick="fillAIBox('I feel lonely')">Lonely</button>
+                    <button onclick="fillAIBox('I need medicine reminder')">Reminder</button>
                 </div>
 
-                <div class="resource-item" onclick="openResourceCategory('Caregiver Support')">
-                    <span class="emoji">👥</span>Caregiver
+                <div class="ai-input-row">
+                    <textarea id="aiBoxMessage" placeholder="Type here... Example: I need food help"></textarea>
+                    <button onclick="sendAIBoxMessage()">➤</button>
                 </div>
 
-                <div class="resource-item" onclick="openResourceCategory('Accessibility')">
-                    <span class="emoji">♿</span>Access
+                <div id="aiBoxResult" class="ai-result-box">
+                    Your answer will show here.
                 </div>
             </div>
 
-            <p>Find local resources and programs in your area.</p>
-            <span class="explore-link" onclick="openResourcesAll()">Explore Resources →</span>
         </section>
 
         <section id="volunteer" class="volunteer-box">
@@ -756,47 +719,27 @@
                 <div class="volunteer-card purple" onclick="openHelpRequest('Friendly Call')">
                     <h3>☎️ Friendly Calls</h3>
                     <p>Brighten someone’s day with a friendly phone call.</p>
-                    <strong>Learn more →</strong>
                 </div>
 
                 <div class="volunteer-card green" onclick="openHelpRequest('Grocery Help')">
                     <h3>🛒 Grocery Help</h3>
                     <p>Help neighbors with grocery deliveries.</p>
-                    <strong>Learn more →</strong>
                 </div>
 
                 <div class="volunteer-card blue" onclick="openHelpRequest('Tech Help')">
                     <h3>💻 Tech Help</h3>
                     <p>Help others with basic technology support.</p>
-                    <strong>Learn more →</strong>
                 </div>
-            </div>
-        </section>
-
-        <section class="cta">
-            <div>
-                <h2>Care is stronger when we’re together.</h2>
-                <p>Whether you need support or want to help, KindConnect is here for you.</p>
-            </div>
-
-            <div class="hero-buttons">
-                <button class="primary-btn" onclick="openHelpRequest('General Help')">♡ I Need Help</button>
-                <button class="outline-btn" onclick="openVolunteerForm()">👥 Become a Volunteer</button>
             </div>
         </section>
     </main>
 
     <footer>
-        <div class="logo">
-            <div class="logo-circle">💙</div>
-            <div>
-                <h1 style="font-size:22px;">KindConnect AI</h1>
-                <p>Support for Everyone</p>
-            </div>
-        </div>
-
-        <p>A passion project built with Java, Spring Boot, PostgreSQL, and AI-style logic.</p>
+        <strong>KindConnect</strong> — Community support project built with Java, Spring Boot, PostgreSQL, and smart
+        support logic.
     </footer>
+
+    <button class="ai-float-btn" onclick="openAIChat()">🤖</button>
 
     <div id="modalBg" class="modal-bg">
         <div class="modal">
@@ -825,30 +768,91 @@
             document.getElementById(id).scrollIntoView({ behavior: "smooth" });
         }
 
-        function openInfo(title, message) {
-            openModal(title, `
-      <div class="info-card">
-        <h3>${title}</h3>
-        <p>${message}</p>
-      </div>
-    `);
+        function openRegister() {
+            openModal("Register First", `
+                <div class="info-card">
+                    <h3>Create your KindConnect account</h3>
+                    <p>Register first, then login to use KindConnect.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Name</label>
+                    <input id="registerName" placeholder="Your name">
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input id="registerEmail" placeholder="email@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input id="registerPassword" type="password" placeholder="password">
+                </div>
+
+                <div class="form-group">
+                    <label>User Type</label>
+                    <select id="registerUserType">
+                        <option>FAMILY</option>
+                        <option>SENIOR</option>
+                        <option>CAREGIVER</option>
+                        <option>VOLUNTEER</option>
+                    </select>
+                </div>
+
+                <button class="modal-action" onclick="registerUser()">Register</button>
+                <button class="modal-action" onclick="openLogin()">Already registered? Login</button>
+
+                <div id="registerResult" class="result-box"></div>
+            `);
+        }
+
+        async function registerUser() {
+            const user = {
+                name: document.getElementById("registerName").value,
+                email: document.getElementById("registerEmail").value,
+                password: document.getElementById("registerPassword").value,
+                userType: document.getElementById("registerUserType").value
+            };
+
+            try {
+                const response = await fetch(`${API}/api/auth/register`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(user)
+                });
+
+                const result = await response.json();
+                document.getElementById("registerResult").innerText =
+                    JSON.stringify(result, null, 2) + "\n\nNow click Login.";
+            } catch (error) {
+                document.getElementById("registerResult").innerText =
+                    "Backend is not running. Start Spring Boot first.";
+            }
         }
 
         function openLogin() {
             openModal("Login", `
-      <div class="form-group">
-        <label>Email</label>
-        <input id="loginEmail" placeholder="email@example.com">
-      </div>
+                <div class="info-card">
+                    <h3>Login to KindConnect</h3>
+                    <p>Use the same email and password you registered with.</p>
+                </div>
 
-      <div class="form-group">
-        <label>Password</label>
-        <input id="loginPassword" type="password" placeholder="password">
-      </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input id="loginEmail" placeholder="email@example.com">
+                </div>
 
-      <button class="modal-action" onclick="loginUser()">Login</button>
-      <div id="loginResult" class="result-box"></div>
-    `);
+                <div class="form-group">
+                    <label>Password</label>
+                    <input id="loginPassword" type="password" placeholder="password">
+                </div>
+
+                <button class="modal-action" onclick="loginUser()">Login</button>
+                <button class="modal-action" onclick="openRegister()">Need account? Register</button>
+
+                <div id="loginResult" class="result-box"></div>
+            `);
         }
 
         async function loginUser() {
@@ -857,14 +861,18 @@
                 password: document.getElementById("loginPassword").value
             };
 
-            const response = await fetch(`${API}/api/auth/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            });
+            try {
+                const response = await fetch(`${API}/api/auth/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
 
-            const result = await response.json();
-            document.getElementById("loginResult").innerText = JSON.stringify(result, null, 2);
+                const result = await response.json();
+                document.getElementById("loginResult").innerText = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById("loginResult").innerText = "Backend is not running.";
+            }
         }
 
         function openResourcesAll() {
@@ -880,24 +888,24 @@
                 let html = "";
                 resources.forEach(resource => {
                     html += `
-          <div class="info-card">
-            <h3>${resource.name}</h3>
-            <p><strong>Category:</strong> ${resource.category}</p>
-            <p><strong>Description:</strong> ${resource.description}</p>
-            <p><strong>Location:</strong> ${resource.location}</p>
-            <p><strong>Phone:</strong> ${resource.phone}</p>
-          </div>
-        `;
+                        <div class="info-card">
+                            <h3>${resource.name}</h3>
+                            <p><strong>Category:</strong> ${resource.category}</p>
+                            <p><strong>Description:</strong> ${resource.description}</p>
+                            <p><strong>Location:</strong> ${resource.location}</p>
+                            <p><strong>Phone:</strong> ${resource.phone}</p>
+                        </div>
+                    `;
                 });
 
                 document.getElementById("modalBody").innerHTML = html || "<p>No resources found.</p>";
             } catch (error) {
-                document.getElementById("modalBody").innerHTML = "<p>Could not load resources. Make sure backend is running.</p>";
+                document.getElementById("modalBody").innerHTML = "<p>Backend is not running.</p>";
             }
         }
 
         async function openResourceCategory(category) {
-            openModal(category + " Resources", `<p>Loading ${category} resources...</p>`);
+            openModal(category + " Resources", `<p>Loading...</p>`);
 
             try {
                 const response = await fetch(`${API}/api/resources`);
@@ -910,60 +918,59 @@
                 let html = "";
                 filtered.forEach(resource => {
                     html += `
-          <div class="info-card">
-            <h3>${resource.name}</h3>
-            <p><strong>Category:</strong> ${resource.category}</p>
-            <p><strong>Description:</strong> ${resource.description}</p>
-            <p><strong>Location:</strong> ${resource.location}</p>
-            <p><strong>Phone:</strong> ${resource.phone}</p>
-          </div>
-        `;
+                        <div class="info-card">
+                            <h3>${resource.name}</h3>
+                            <p><strong>Description:</strong> ${resource.description}</p>
+                            <p><strong>Location:</strong> ${resource.location}</p>
+                            <p><strong>Phone:</strong> ${resource.phone}</p>
+                        </div>
+                    `;
                 });
 
                 document.getElementById("modalBody").innerHTML =
-                    html || `<p>No ${category} resources found yet.</p>`;
+                    html || `<p>No ${category} resources found.</p>`;
             } catch (error) {
-                document.getElementById("modalBody").innerHTML = "<p>Backend is not running or resources API has an error.</p>";
+                document.getElementById("modalBody").innerHTML = "<p>Could not load resources.</p>";
             }
         }
 
         function openReminderForm(type) {
             openModal("Add Daily Reminder", `
-      <div class="form-group">
-        <label>User ID</label>
-        <input id="reminderUserId" value="1">
-      </div>
+                <div class="form-group">
+                    <label>User ID</label>
+                    <input id="reminderUserId" value="1">
+                </div>
 
-      <div class="form-group">
-        <label>Title</label>
-        <input id="reminderTitle" value="${type === 'Medicine' ? 'Take medicine' : ''}">
-      </div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input id="reminderTitle" value="${type === 'Medicine' ? 'Take medicine' : ''}">
+                </div>
 
-      <div class="form-group">
-        <label>Type</label>
-        <select id="reminderType">
-          <option ${type === 'Medicine' ? 'selected' : ''}>Medicine</option>
-          <option>Appointment</option>
-          <option>Water</option>
-          <option>Bill</option>
-          <option>Self-care</option>
-        </select>
-      </div>
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="reminderType">
+                        <option>Medicine</option>
+                        <option>Appointment</option>
+                        <option>Water</option>
+                        <option>Bill</option>
+                        <option>Self-care</option>
+                    </select>
+                </div>
 
-      <div class="form-group">
-        <label>Date</label>
-        <input id="reminderDate" type="date">
-      </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input id="reminderDate" type="date">
+                </div>
 
-      <div class="form-group">
-        <label>Time</label>
-        <input id="reminderTime" type="time">
-      </div>
+                <div class="form-group">
+                    <label>Time</label>
+                    <input id="reminderTime" type="time">
+                </div>
 
-      <button class="modal-action" onclick="saveReminder()">Save Reminder</button>
-      <button class="modal-action" onclick="openReminderList()">View Reminders</button>
-      <div id="reminderResult" class="result-box"></div>
-    `);
+                <button class="modal-action" onclick="saveReminder()">Save Reminder</button>
+                <button class="modal-action" onclick="openReminderList()">View Reminders</button>
+                <div id="reminderResult" class="result-box"></div>
+            `);
         }
 
         async function saveReminder() {
@@ -975,81 +982,127 @@
                 time: document.getElementById("reminderTime").value
             };
 
-            const response = await fetch(`${API}/api/reminders`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(reminder)
-            });
+            try {
+                const response = await fetch(`${API}/api/reminders`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(reminder)
+                });
 
-            const data = await response.json();
-            document.getElementById("reminderResult").innerText = "Saved:\n" + JSON.stringify(data, null, 2);
+                const data = await response.json();
+                document.getElementById("reminderResult").innerText =
+                    "Saved:\n" + JSON.stringify(data, null, 2);
+                loadDashboardData();
+            } catch (error) {
+                document.getElementById("reminderResult").innerText = "Backend is not running.";
+            }
         }
 
         async function openReminderList() {
             openModal("Daily Reminders", "<p>Loading reminders...</p>");
 
-            const response = await fetch(`${API}/api/reminders`);
-            const reminders = await response.json();
+            try {
+                const response = await fetch(`${API}/api/reminders`);
+                const reminders = await response.json();
 
-            let html = "";
-            reminders.forEach(reminder => {
-                html += `
-        <div class="info-card">
-          <h3>${reminder.title}</h3>
-          <p><strong>Type:</strong> ${reminder.type}</p>
-          <p><strong>Date:</strong> ${reminder.date}</p>
-          <p><strong>Time:</strong> ${reminder.time}</p>
-          <p><strong>Completed:</strong> ${reminder.completed}</p>
-          <button class="modal-action" onclick="completeReminder(${reminder.id})">Mark Complete</button>
-        </div>
-      `;
-            });
+                let html = "";
+                reminders.forEach(reminder => {
+                    html += `
+                        <div class="info-card">
+                            <h3>${reminder.title}</h3>
+                            <p><strong>Type:</strong> ${reminder.type}</p>
+                            <p><strong>Date:</strong> ${reminder.date}</p>
+                            <p><strong>Time:</strong> ${reminder.time}</p>
+                            <p><strong>Completed:</strong> ${reminder.completed}</p>
+                            <button class="modal-action" onclick="completeReminder(${reminder.id})">Mark Complete</button>
+                        </div>
+                    `;
+                });
 
-            document.getElementById("modalBody").innerHTML = html || "<p>No reminders yet.</p>";
+                document.getElementById("modalBody").innerHTML = html || "<p>No reminders yet.</p>";
+            } catch (error) {
+                document.getElementById("modalBody").innerHTML = "<p>Backend is not running.</p>";
+            }
         }
 
         async function completeReminder(id) {
-            await fetch(`${API}/api/reminders/${id}/complete`, { method: "PUT" });
-            openReminderList();
+            try {
+                await fetch(`${API}/api/reminders/${id}/complete`, { method: "PUT" });
+                openReminderList();
+                loadDashboardData();
+            } catch (error) {
+                alert("Backend is not running.");
+            }
+        }
+
+        async function loadDashboardData() {
+            const dashboardTasks = document.getElementById("dashboardTasks");
+            dashboardTasks.innerHTML = "<p>Loading reminders...</p>";
+
+            try {
+                const response = await fetch(`${API}/api/reminders`);
+                const reminders = await response.json();
+
+                if (!Array.isArray(reminders) || reminders.length === 0) {
+                    dashboardTasks.innerHTML = "<p>No reminders yet. Add one from Daily Reminders.</p>";
+                    return;
+                }
+
+                let html = "";
+                reminders.slice(0, 4).forEach(reminder => {
+                    html += `
+                        <div class="task-row">
+                            <div class="task-icon">💊</div>
+                            <div>
+                                <strong>${reminder.title}</strong><br>
+                                <small>${reminder.type}</small>
+                            </div>
+                            <span>${reminder.date || "Today"}</span>
+                            <button class="done-btn" onclick="completeReminder(${reminder.id})">
+                                ${reminder.completed ? "Done" : "Pending"}
+                            </button>
+                        </div>
+                    `;
+                });
+
+                dashboardTasks.innerHTML = html;
+            } catch (error) {
+                dashboardTasks.innerHTML = "<p>Backend is not running. Start Spring Boot first.</p>";
+            }
         }
 
         function openMoodForm() {
             openModal("Mood Check-ins", `
-      <div class="info-card">
-        <h3>Mood Check-ins</h3>
-        <p>Users can record how they feel each day.</p>
-      </div>
+                <div class="form-group">
+                    <label>User ID</label>
+                    <input id="moodUserId" value="1">
+                </div>
 
-      <div class="form-group">
-        <label>User ID</label>
-        <input id="moodUserId" value="1">
-      </div>
+                <div class="form-group">
+                    <label>Mood</label>
+                    <select id="moodValue">
+                        <option>Happy</option>
+                        <option>Sad</option>
+                        <option>Lonely</option>
+                        <option>Stressed</option>
+                        <option>Tired</option>
+                    </select>
+                </div>
 
-      <div class="form-group">
-        <label>Mood</label>
-        <select id="moodValue">
-          <option>Happy</option>
-          <option>Sad</option>
-          <option>Lonely</option>
-          <option>Stressed</option>
-          <option>Tired</option>
-        </select>
-      </div>
+                <div class="form-group">
+                    <label>Note</label>
+                    <textarea id="moodNote" placeholder="Write how you feel..."></textarea>
+                </div>
 
-      <div class="form-group">
-        <label>Note</label>
-        <textarea id="moodNote" placeholder="Write how you feel..."></textarea>
-      </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input id="moodDate" type="date">
+                </div>
 
-      <div class="form-group">
-        <label>Date</label>
-        <input id="moodDate" type="date">
-      </div>
-
-      <button class="modal-action" onclick="saveMood()">Save Mood</button>
-      <button class="modal-action" onclick="openMoodList()">View Mood History</button>
-      <div id="moodResult" class="result-box"></div>
-    `);
+                <button class="modal-action" onclick="saveMood()">Save Mood</button>
+                <button class="modal-action" onclick="openMoodList()">View Mood History</button>
+                <div id="moodResult" class="result-box"></div>
+            `);
         }
 
         async function saveMood() {
@@ -1060,62 +1113,71 @@
                 date: document.getElementById("moodDate").value
             };
 
-            const response = await fetch(`${API}/api/moods`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(mood)
-            });
+            try {
+                const response = await fetch(`${API}/api/moods`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(mood)
+                });
 
-            const data = await response.json();
-            document.getElementById("moodResult").innerText = "Saved:\n" + JSON.stringify(data, null, 2);
+                const data = await response.json();
+                document.getElementById("moodResult").innerText =
+                    "Saved:\n" + JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById("moodResult").innerText = "Backend is not running.";
+            }
         }
 
         async function openMoodList() {
             openModal("Mood History", "<p>Loading moods...</p>");
 
-            const response = await fetch(`${API}/api/moods`);
-            const moods = await response.json();
+            try {
+                const response = await fetch(`${API}/api/moods`);
+                const moods = await response.json();
 
-            let html = "";
-            moods.forEach(mood => {
-                html += `
-        <div class="info-card">
-          <h3>${mood.mood}</h3>
-          <p><strong>Note:</strong> ${mood.note}</p>
-          <p><strong>Date:</strong> ${mood.date}</p>
-        </div>
-      `;
-            });
+                let html = "";
+                moods.forEach(mood => {
+                    html += `
+                        <div class="info-card">
+                            <h3>${mood.mood}</h3>
+                            <p><strong>Note:</strong> ${mood.note}</p>
+                            <p><strong>Date:</strong> ${mood.date}</p>
+                        </div>
+                    `;
+                });
 
-            document.getElementById("modalBody").innerHTML = html || "<p>No mood check-ins yet.</p>";
+                document.getElementById("modalBody").innerHTML = html || "<p>No mood check-ins yet.</p>";
+            } catch (error) {
+                document.getElementById("modalBody").innerHTML = "<p>Backend is not running.</p>";
+            }
         }
 
         function openHelpRequest(type) {
             openModal(type + " Request", `
-      <div class="form-group">
-        <label>User ID</label>
-        <input id="helpUserId" value="1">
-      </div>
+                <div class="form-group">
+                    <label>User ID</label>
+                    <input id="helpUserId" value="1">
+                </div>
 
-      <div class="form-group">
-        <label>Request Type</label>
-        <select id="helpType">
-          <option ${type === 'Grocery Help' ? 'selected' : ''}>Grocery Help</option>
-          <option ${type === 'Ride Help' ? 'selected' : ''}>Ride Help</option>
-          <option ${type === 'Tech Help' ? 'selected' : ''}>Tech Help</option>
-          <option ${type === 'Friendly Call' ? 'selected' : ''}>Friendly Call</option>
-          <option ${type === 'General Help' ? 'selected' : ''}>General Help</option>
-        </select>
-      </div>
+                <div class="form-group">
+                    <label>Request Type</label>
+                    <select id="helpType">
+                        <option ${type === "Grocery Help" ? "selected" : ""}>Grocery Help</option>
+                        <option ${type === "Ride Help" ? "selected" : ""}>Ride Help</option>
+                        <option ${type === "Tech Help" ? "selected" : ""}>Tech Help</option>
+                        <option ${type === "Friendly Call" ? "selected" : ""}>Friendly Call</option>
+                        <option ${type === "General Help" ? "selected" : ""}>General Help</option>
+                    </select>
+                </div>
 
-      <div class="form-group">
-        <label>Message</label>
-        <textarea id="helpMessage" placeholder="What help do you need?"></textarea>
-      </div>
+                <div class="form-group">
+                    <label>Message</label>
+                    <textarea id="helpMessage" placeholder="What help do you need?"></textarea>
+                </div>
 
-      <button class="modal-action" onclick="saveHelpRequest()">Submit Help Request</button>
-      <div id="helpResult" class="result-box"></div>
-    `);
+                <button class="modal-action" onclick="saveHelpRequest()">Submit Help Request</button>
+                <div id="helpResult" class="result-box"></div>
+            `);
         }
 
         async function saveHelpRequest() {
@@ -1133,43 +1195,44 @@
                 });
 
                 const data = await response.json();
-                document.getElementById("helpResult").innerText = "Saved:\n" + JSON.stringify(data, null, 2);
+                document.getElementById("helpResult").innerText =
+                    "Saved:\n" + JSON.stringify(data, null, 2);
             } catch (error) {
                 document.getElementById("helpResult").innerText =
-                    "Backend help-request API is not added yet. This form is ready for it.";
+                    "Help request backend is not added yet, but this frontend is ready.";
             }
         }
 
         function openVolunteerForm() {
             openModal("Become a Volunteer", `
-      <div class="form-group">
-        <label>Name</label>
-        <input id="volunteerName" placeholder="Your name">
-      </div>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input id="volunteerName" placeholder="Your name">
+                </div>
 
-      <div class="form-group">
-        <label>Email</label>
-        <input id="volunteerEmail" placeholder="email@example.com">
-      </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input id="volunteerEmail" placeholder="email@example.com">
+                </div>
 
-      <div class="form-group">
-        <label>Skill</label>
-        <select id="volunteerSkill">
-          <option>Grocery Help</option>
-          <option>Ride Help</option>
-          <option>Tech Help</option>
-          <option>Friendly Call</option>
-        </select>
-      </div>
+                <div class="form-group">
+                    <label>Skill</label>
+                    <select id="volunteerSkill">
+                        <option>Grocery Help</option>
+                        <option>Ride Help</option>
+                        <option>Tech Help</option>
+                        <option>Friendly Call</option>
+                    </select>
+                </div>
 
-      <div class="form-group">
-        <label>Availability</label>
-        <input id="volunteerAvailability" placeholder="Weekends, evenings, etc.">
-      </div>
+                <div class="form-group">
+                    <label>Availability</label>
+                    <input id="volunteerAvailability" placeholder="Weekends, evenings, etc.">
+                </div>
 
-      <button class="modal-action" onclick="saveVolunteer()">Save Volunteer</button>
-      <div id="volunteerResult" class="result-box"></div>
-    `);
+                <button class="modal-action" onclick="saveVolunteer()">Save Volunteer</button>
+                <div id="volunteerResult" class="result-box"></div>
+            `);
         }
 
         async function saveVolunteer() {
@@ -1188,92 +1251,97 @@
                 });
 
                 const data = await response.json();
-                document.getElementById("volunteerResult").innerText = "Saved:\n" + JSON.stringify(data, null, 2);
+                document.getElementById("volunteerResult").innerText =
+                    "Saved:\n" + JSON.stringify(data, null, 2);
             } catch (error) {
                 document.getElementById("volunteerResult").innerText =
-                    "Backend volunteer API is not added yet. This form is ready for it.";
+                    "Volunteer backend is not added yet, but this frontend is ready.";
             }
         }
 
-        function openChatInfo() {
-            openModal("Smart Support Chat", `
-      <div class="info-card">
-        <h3>Smart Support Chat</h3>
-        <p>This feature uses AI-style logic to guide users.</p>
-        <p>Example: if user says "I need food help", the chat suggests Resource Finder.</p>
-      </div>
-    `);
+        function openAIChat() {
+            openModal("KindConnect Support Chat", `
+                <div class="info-card">
+                    <h3>Smart Support Chat</h3>
+                    <p>This chat uses AI-style logic to guide users to the right support.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Type your message</label>
+                    <textarea id="aiMessage" placeholder="Example: I need food help, I feel lonely, I need a ride..."></textarea>
+                </div>
+
+                <button class="modal-action" onclick="sendAIMessage()">Send Message</button>
+
+                <div id="aiResult" class="result-box"></div>
+            `);
         }
 
-        async function sendSmartChat() {
-            const message = document.getElementById("chatMessage").value;
+        function sendAIMessage() {
+            const message = document.getElementById("aiMessage").value.toLowerCase();
+            const answer = getAIAnswer(message);
 
-            openModal("Smart Support Chat", `<p>Thinking...</p>`);
-
-            try {
-                const response = await fetch(`${API}/api/chat`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ userId: 1, message })
-                });
-
-                const data = await response.json();
-
-                document.getElementById("modalBody").innerHTML = `
-        <div class="info-card">
-          <h3>User Message</h3>
-          <p>${data.userMessage || message}</p>
-        </div>
-        <div class="info-card">
-          <h3>Response</h3>
-          <p>${data.botResponse || data.agentResponse || "I can guide you to resources, reminders, and support."}</p>
-          <p><strong>Category:</strong> ${data.category || "GENERAL"}</p>
-          <p><strong>Suggested Action:</strong> ${data.suggestedAction || "VIEW_RESOURCES"}</p>
-        </div>
-      `;
-            } catch (error) {
-                document.getElementById("modalBody").innerHTML = `
-        <div class="info-card">
-          <h3>Smart Support Chat</h3>
-          <p>I can guide you to resources, reminders, mood check-ins, help requests, or volunteer support.</p>
-          <p><strong>Your message:</strong> ${message}</p>
-          <p><strong>Note:</strong> Backend chat API is not added yet. This frontend is ready for it.</p>
-        </div>
-      `;
-            }
+            document.getElementById("aiResult").innerText =
+                answer.response + "\n\n" + answer.action;
         }
 
-        async function loadDashboardData() {
-            try {
-                const response = await fetch(`${API}/api/reminders`);
-                const reminders = await response.json();
+        function fillAIBox(text) {
+            document.getElementById("aiBoxMessage").value = text;
+            sendAIBoxMessage();
+        }
 
-                let html = "";
-                reminders.slice(0, 4).forEach(reminder => {
-                    html += `
-          <div class="task-row">
-            <div class="task-icon">💊</div>
-            <div>
-              <strong>${reminder.title}</strong><br>
-              <small>${reminder.type}</small>
-            </div>
-            <span>${reminder.date || "Today"}</span>
-            <button class="done-btn" onclick="completeReminder(${reminder.id})">
-              ${reminder.completed ? "Done" : "Pending"}
-            </button>
-          </div>
-        `;
-                });
+        function sendAIBoxMessage() {
+            const message = document.getElementById("aiBoxMessage").value.toLowerCase();
+            const answer = getAIAnswer(message);
 
-                document.getElementById("dashboardTasks").innerHTML =
-                    html || "<p>No reminders yet.</p>";
-            } catch (error) {
-                document.getElementById("dashboardTasks").innerHTML = "<p>Backend is not running.</p>";
+            document.getElementById("aiBoxResult").innerText =
+                answer.response + "\n\n" + answer.action;
+        }
+
+        function getAIAnswer(message) {
+            let response = "";
+            let action = "";
+
+            if (message.includes("food") || message.includes("grocery")) {
+                response = "It sounds like you need food or grocery help.";
+                action = "Suggested action: Check Food resources or create a Grocery Help request.";
+            } else if (message.includes("ride") || message.includes("transportation")) {
+                response = "It sounds like you need transportation support.";
+                action = "Suggested action: Check Transportation resources or request ride help.";
+            } else if (
+                message.includes("medicine") ||
+                message.includes("appointment") ||
+                message.includes("water") ||
+                message.includes("bill")
+            ) {
+                response = "It sounds like you need a daily reminder.";
+                action = "Suggested action: Create a reminder for medicine, appointments, water, bills, or self-care.";
+            } else if (
+                message.includes("sad") ||
+                message.includes("lonely") ||
+                message.includes("stress") ||
+                message.includes("tired")
+            ) {
+                response = "I’m sorry you feel that way.";
+                action = "Suggested action: Save a Mood Check-in or request a Friendly Call.";
+            } else if (
+                message.includes("tech") ||
+                message.includes("computer") ||
+                message.includes("phone")
+            ) {
+                response = "It sounds like you need tech help.";
+                action = "Suggested action: Create a Tech Help request.";
+            } else {
+                response = "I can help guide you to resources, reminders, mood check-ins, volunteer help, or friendly calls.";
+                action = "Suggested action: Choose a support option or type what you need.";
             }
+
+            return { response, action };
         }
 
         loadDashboardData();
     </script>
+
 </body>
 
 </html>
