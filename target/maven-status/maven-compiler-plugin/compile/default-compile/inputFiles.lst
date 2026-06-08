@@ -2,6 +2,7 @@
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/service/ReminderService.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/model/SmartChatMessage.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/repository/HelpRequestRepository.java
+/Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/service/OpenAIService.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/model/Reminder.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/dto/LoginRequest.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/service/SmartChatService.java
@@ -14,6 +15,8 @@
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/model/Volunteer.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/service/VolunteerService.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/dto/AuthResponse.java
+/Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/dto/AgentChatRequest.java
+/Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/controller/ChatController.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/service/HelpRequestService.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/dto/ChatRequest.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/repository/VolunteerRepository.java
@@ -31,4 +34,5 @@
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/repository/UserRepository.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/controller/HomeController.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/controller/ResourceController.java
+/Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/dto/AgentChatResponse.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/repository/ResourceRepository.java

@@ -521,6 +521,7 @@
             white-space: pre-wrap;
             font-size: 14px;
             color: #102044;
+            line-height: 1.5;
         }
 
         footer {
@@ -631,13 +632,12 @@
                         <button onclick="openReminderList()">☑ Tasks</button>
                         <button onclick="openMoodList()">💙 Health</button>
                         <button onclick="openResourcesAll()">📍 Resources</button>
-                        <button onclick="openAIChat()">🤖 AI Chat</button>
                     </div>
 
                     <div>
                         <h2>Today’s Tasks</h2>
                         <div id="dashboardTasks">
-                            <p>Loading reminders...</p>
+
                         </div>
                     </div>
                 </div>
@@ -684,13 +684,11 @@
                 <div class="ai-chat-top">
                     <div class="ai-avatar">🤖</div>
                     <div>
-                        <h2>KindConnect Assistant</h2>
-                        <p>Tell me what you need. I can guide you to the right support.</p>
+                        <h2>KindConnect AI Agent</h2>
                     </div>
                 </div>
 
                 <div class="ai-message bot-message">
-                    Hi! I can help with food, rides, reminders, mood check-ins, friendly calls, or tech help.
                 </div>
 
                 <div class="ai-chip-row">
@@ -703,10 +701,6 @@
                 <div class="ai-input-row">
                     <textarea id="aiBoxMessage" placeholder="Type here... Example: I need food help"></textarea>
                     <button onclick="sendAIBoxMessage()">➤</button>
-                </div>
-
-                <div id="aiBoxResult" class="ai-result-box">
-                    Your answer will show here.
                 </div>
             </div>
 
@@ -733,11 +727,6 @@
             </div>
         </section>
     </main>
-
-    <footer>
-        <strong>KindConnect</strong> — Community support project built with Java, Spring Boot, PostgreSQL, and smart
-        support logic.
-    </footer>
 
     <button class="ai-float-btn" onclick="openAIChat()">🤖</button>
 
@@ -1027,9 +1016,19 @@
 
         async function completeReminder(id) {
             try {
-                await fetch(`${API}/api/reminders/${id}/complete`, { method: "PUT" });
-                openReminderList();
+                await fetch(`${API}/api/reminders/${id}/complete`, {
+                    method: "PUT"
+                });
+
+                // Refresh dashboard after marking complete
                 loadDashboardData();
+
+                // If reminder modal is open, refresh the reminder list also
+                const modalTitle = document.getElementById("modalTitle");
+                if (modalTitle && modalTitle.innerText === "Daily Reminders") {
+                    openReminderList();
+                }
+
             } catch (error) {
                 alert("Backend is not running.");
             }
@@ -1043,29 +1042,44 @@
                 const response = await fetch(`${API}/api/reminders`);
                 const reminders = await response.json();
 
-                if (!Array.isArray(reminders) || reminders.length === 0) {
-                    dashboardTasks.innerHTML = "<p>No reminders yet. Add one from Daily Reminders.</p>";
+                // Show only reminders that are NOT completed
+                const notCompletedReminders = reminders.filter(reminder => reminder.completed === false);
+
+                if (!Array.isArray(notCompletedReminders) || notCompletedReminders.length === 0) {
+                    dashboardTasks.innerHTML = `
+                <div class="task-row">
+                    <div class="task-icon">✅</div>
+                    <div>
+                        <strong>No pending tasks</strong><br>
+                        <small>All reminders are completed.</small>
+                    </div>
+                    <span>Today</span>
+                    <button class="done-btn">Done</button>
+                </div>
+            `;
                     return;
                 }
 
                 let html = "";
-                reminders.slice(0, 4).forEach(reminder => {
+
+                notCompletedReminders.slice(0, 4).forEach(reminder => {
                     html += `
-                        <div class="task-row">
-                            <div class="task-icon">💊</div>
-                            <div>
-                                <strong>${reminder.title}</strong><br>
-                                <small>${reminder.type}</small>
-                            </div>
-                            <span>${reminder.date || "Today"}</span>
-                            <button class="done-btn" onclick="completeReminder(${reminder.id})">
-                                ${reminder.completed ? "Done" : "Pending"}
-                            </button>
-                        </div>
-                    `;
+                <div class="task-row">
+                    <div class="task-icon">💊</div>
+                    <div>
+                        <strong>${reminder.title}</strong><br>
+                        <small>${reminder.type}</small>
+                    </div>
+                    <span>${reminder.date || "Today"}</span>
+                    <button class="done-btn" onclick="completeReminder(${reminder.id})">
+                        Done
+                    </button>
+                </div>
+            `;
                 });
 
                 dashboardTasks.innerHTML = html;
+
             } catch (error) {
                 dashboardTasks.innerHTML = "<p>Backend is not running. Start Spring Boot first.</p>";
             }
@@ -1260,10 +1274,10 @@
         }
 
         function openAIChat() {
-            openModal("KindConnect Support Chat", `
+            openModal("KindConnect AI Agent", `
                 <div class="info-card">
-                    <h3>Smart Support Chat</h3>
-                    <p>This chat uses AI-style logic to guide users to the right support.</p>
+                    <h3>Real OpenAI Support Chat</h3>
+                    <p>This chat sends your question to the Spring Boot backend, and the backend calls OpenAI.</p>
                 </div>
 
                 <div class="form-group">
@@ -1273,16 +1287,46 @@
 
                 <button class="modal-action" onclick="sendAIMessage()">Send Message</button>
 
-                <div id="aiResult" class="result-box"></div>
+                <div id="aiResult" class="result-box">AI answer will show here.</div>
             `);
         }
 
-        function sendAIMessage() {
-            const message = document.getElementById("aiMessage").value.toLowerCase();
-            const answer = getAIAnswer(message);
+        async function sendAIMessage() {
+            const message = document.getElementById("aiMessage").value;
+            const resultBox = document.getElementById("aiResult");
 
-            document.getElementById("aiResult").innerText =
-                answer.response + "\n\n" + answer.action;
+            if (!message || message.trim() === "") {
+                resultBox.innerText = "Please type your question first.";
+                return;
+            }
+
+            resultBox.innerText = "Thinking...";
+
+            try {
+                const response = await fetch(`${API}/chat`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        userId: 1,
+                        message: message
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.reply) {
+                    resultBox.innerText = data.reply;
+                } else {
+                    resultBox.innerText = JSON.stringify(data, null, 2);
+                }
+
+            } catch (error) {
+                console.error("AI error:", error);
+                resultBox.innerText =
+                    "AI is not working. Make sure Spring Boot is running on port 8080 and /chat endpoint exists.";
+            }
         }
 
         function fillAIBox(text) {
@@ -1290,53 +1334,42 @@
             sendAIBoxMessage();
         }
 
-        function sendAIBoxMessage() {
-            const message = document.getElementById("aiBoxMessage").value.toLowerCase();
-            const answer = getAIAnswer(message);
+        async function sendAIBoxMessage() {
+            const message = document.getElementById("aiBoxMessage").value;
+            const resultBox = document.getElementById("aiBoxResult");
 
-            document.getElementById("aiBoxResult").innerText =
-                answer.response + "\n\n" + answer.action;
-        }
-
-        function getAIAnswer(message) {
-            let response = "";
-            let action = "";
-
-            if (message.includes("food") || message.includes("grocery")) {
-                response = "It sounds like you need food or grocery help.";
-                action = "Suggested action: Check Food resources or create a Grocery Help request.";
-            } else if (message.includes("ride") || message.includes("transportation")) {
-                response = "It sounds like you need transportation support.";
-                action = "Suggested action: Check Transportation resources or request ride help.";
-            } else if (
-                message.includes("medicine") ||
-                message.includes("appointment") ||
-                message.includes("water") ||
-                message.includes("bill")
-            ) {
-                response = "It sounds like you need a daily reminder.";
-                action = "Suggested action: Create a reminder for medicine, appointments, water, bills, or self-care.";
-            } else if (
-                message.includes("sad") ||
-                message.includes("lonely") ||
-                message.includes("stress") ||
-                message.includes("tired")
-            ) {
-                response = "I’m sorry you feel that way.";
-                action = "Suggested action: Save a Mood Check-in or request a Friendly Call.";
-            } else if (
-                message.includes("tech") ||
-                message.includes("computer") ||
-                message.includes("phone")
-            ) {
-                response = "It sounds like you need tech help.";
-                action = "Suggested action: Create a Tech Help request.";
-            } else {
-                response = "I can help guide you to resources, reminders, mood check-ins, volunteer help, or friendly calls.";
-                action = "Suggested action: Choose a support option or type what you need.";
+            if (!message || message.trim() === "") {
+                resultBox.innerText = "Please type your question first.";
+                return;
             }
 
-            return { response, action };
+            resultBox.innerText = "Thinking...";
+
+            try {
+                const response = await fetch(`${API}/chat`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        userId: 1,
+                        message: message
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.reply) {
+                    resultBox.innerText = data.reply;
+                } else {
+                    resultBox.innerText = JSON.stringify(data, null, 2);
+                }
+
+            } catch (error) {
+                console.error("AI error:", error);
+                resultBox.innerText =
+                    "AI is not working. Make sure Spring Boot is running on port 8080 and /chat endpoint exists.";
+            }
         }
 
         loadDashboardData();
