@@ -814,23 +814,51 @@
             document.getElementById("dashboardDate").innerText = "📅 " + formattedDate;
         }
 
-        function openMessages() {
-            openModal("Messages", `
-            <div class="info-card">
-                <h3>✉️ Welcome Message</h3>
-                <p>Your KindConnect dashboard is ready.</p>
-            </div>
+        async function openMessages() {
+            openModal("Messages", `<p>Loading messages...</p>`);
+
+            try {
+                const response = await fetch(`${API}/api/messages/user/1`);
+                const messages = await response.json();
+
+                let html = `
+            <button class="modal-action" onclick="openAddMessageForm()">Add New Message</button>
 
             <div class="info-card">
-                <h3>🔔 Reminder Message</h3>
-                <p>Check your daily reminders and mark completed tasks as Done.</p>
+                <h3>${messages.length} messages found</h3>
+                <p>These messages are saved in your PostgreSQL database.</p>
             </div>
+        `;
 
-            <div class="info-card">
-                <h3>💙 Support Message</h3>
-                <p>If you need help, use the round AI button or submit a help request.</p>
-            </div>
-        `);
+                messages.forEach(message => {
+                    html += `
+                <div class="info-card">
+                    <h3>${message.readMessage ? "✅" : "🔔"} ${message.title}</h3>
+                    <p><strong>Type:</strong> ${message.type}</p>
+                    <p>${message.content}</p>
+                    <p><strong>Status:</strong> ${message.readMessage ? "Read" : "Unread"}</p>
+
+                    <button class="modal-action" onclick="markMessageRead(${message.id})">
+                        Mark Read
+                    </button>
+
+                    <button class="modal-action" onclick="deleteMessage(${message.id})">
+                        Delete
+                    </button>
+                </div>
+            `;
+                });
+
+                document.getElementById("modalBody").innerHTML =
+                    messages.length > 0 ? html : `
+                <button class="modal-action" onclick="openAddMessageForm()">Add New Message</button>
+                <p>No messages found.</p>
+            `;
+
+            } catch (error) {
+                document.getElementById("modalBody").innerHTML =
+                    "<p>Could not load messages. Make sure backend is running.</p>";
+            }
         }
 
         function openSettings() {
