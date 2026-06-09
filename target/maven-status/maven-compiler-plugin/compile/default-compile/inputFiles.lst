@@ -17,6 +17,7 @@
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/dto/AuthResponse.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/dto/AgentChatRequest.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/controller/ChatController.java
+/Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/service/OllamaService.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/service/HelpRequestService.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/dto/ChatRequest.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/repository/VolunteerRepository.java
