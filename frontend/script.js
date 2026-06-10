@@ -449,7 +449,7 @@ async function openResourceCategory(category) {
 
         let html = `
             <div class="info-card">
-                <h3>${filtered.length} ${category} resources found</h3>
+               <h3> ${category} resources found</h3>
                 <p>Scroll inside this popup to view all resources.</p>
             </div>
         `;
@@ -501,7 +501,7 @@ async function loadResources() {
 }
 
 /* ===================== REMINDERS ===================== */
-
+d
 function openReminderForm(type) {
     openModal("Add Daily Reminder", `
         <div class="form-group">
