@@ -20,10 +20,18 @@ public class MessageService {
     }
 
     public List<Message> getMessagesByUserId(Long userId) {
-        return messageRepository.findByUserId(userId);
+        return messageRepository.findAll()
+                .stream()
+                .filter(message -> message.getUserId() != null
+                        && message.getUserId().equals(userId))
+                .toList();
     }
 
     public Message addMessage(Message message) {
+        if (message.getReadMessage() == null) {
+            message.setReadMessage(false);
+        }
+
         return messageRepository.save(message);
     }
 

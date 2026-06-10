@@ -1,0 +1,9 @@
+userId,title,content,type,readMessage
+1,Water Bill Paid,Your water bill was paid successfully. No action is needed.,Bill,false
+1,Electric Bill Due Soon,Your electric bill due date is June 15. Please pay before the due date.,Bill,false
+1,Phone Bill Due,Your phone bill is due on June 20. Please pay it before the due date.,Bill,false
+1,Medicine Reminder,Your medicine reminder is scheduled for 8:00 AM today.,Reminder,false
+1,Doctor Appointment,You have a doctor appointment tomorrow at 2:30 PM.,Appointment,false
+1,Ride Request Received,Your ride request has been received. A volunteer will contact you soon.,Transportation,false
+1,Friendly Call Scheduled,A friendly call volunteer is available to call you this evening.,Friendly Call,false
+1,Food Support Available,Food pantry support is available near your area. Check Food resources.,Food,false
