@@ -24,6 +24,20 @@ function setDashboardDate() {
     });
 
     document.getElementById("dashboardDate").innerText = "📅 " + formattedDate;
+    const hour = today.getHours();
+    let greeting = "";
+
+    if (hour >= 5 && hour < 12) {
+        greeting = "Good morning! You’ve got this.";
+    } else if (hour >= 12 && hour < 17) {
+        greeting = "Good afternoon! Keep going.";
+    } else if (hour >= 17 && hour < 21) {
+        greeting = "Good evening! You did great today.";
+    } else {
+        greeting = "Good night! Take some rest.";
+    }
+
+    document.getElementById("dashboardGreeting").innerText = greeting;
 }
 
 /* ===================== MESSAGES ===================== */
@@ -611,6 +625,8 @@ async function completeReminder(id) {
     }
 }
 
+/* ===================== Dashboard ===================== */
+
 async function loadDashboardData() {
     const dashboardTasks = document.getElementById("dashboardTasks");
     dashboardTasks.innerHTML = "<p>Loading reminders...</p>";
@@ -619,56 +635,102 @@ async function loadDashboardData() {
         const response = await fetch(`${API}/api/reminders`);
         const reminders = await response.json();
 
-        const notCompletedReminders = reminders.filter(reminder => reminder.completed === false);
-
-        if (!Array.isArray(notCompletedReminders) || notCompletedReminders.length === 0) {
-            dashboardTasks.innerHTML = `
-                <div class="task-row">
-                    <div class="task-icon">✅</div>
-                    <div>
-                        <strong>No pending tasks</strong><br>
-                        <small>All completed.</small>
-                    </div>
-                    <span>Today</span>
-                    <button class="done-btn">Done</button>
-                </div>
-            `;
-            return;
-        }
+        const pendingReminders = reminders.filter(reminder => reminder.completed === false);
+        const completedReminders = reminders.filter(reminder => reminder.completed === true);
 
         let html = "";
 
-        notCompletedReminders.slice(0, 4).forEach(reminder => {
-            let icon = "🔔";
+        html += `<h3 class="dashboard-small-title">Pending Tasks</h3>`;
 
-            if (reminder.type && reminder.type.toLowerCase().includes("medicine")) {
-                icon = "💊";
-            } else if (reminder.type && reminder.type.toLowerCase().includes("water")) {
-                icon = "💧";
-            } else if (reminder.type && reminder.type.toLowerCase().includes("appointment")) {
-                icon = "📅";
-            }
-
+        if (pendingReminders.length === 0) {
             html += `
-                <div class="task-row">
-                    <div class="task-icon">${icon}</div>
+                <div class="task-row task-row-completed">
+                    <div class="task-icon">✅</div>
                     <div>
-                        <strong>${reminder.title}</strong><br>
-                        <small>${reminder.type}</small>
+                        <strong>No pending tasks</strong><br>
+                        <small>You are all caught up.</small>
                     </div>
-                    <span>${reminder.time || reminder.date || "Today"}</span>
-                    <button class="done-btn" onclick="completeReminder(${reminder.id})">
-                        Done
-                    </button>
+                    <span class="status-badge completed-badge">Completed</span>
+                    <button class="complete-btn disabled-btn">Done</button>
                 </div>
             `;
-        });
+        } else {
+            pendingReminders.forEach(reminder => {
+                let icon = "🔔";
+
+                if (reminder.type && reminder.type.toLowerCase().includes("medicine")) {
+                    icon = "💊";
+                } else if (reminder.type && reminder.type.toLowerCase().includes("water")) {
+                    icon = "💧";
+                } else if (reminder.type && reminder.type.toLowerCase().includes("appointment")) {
+                    icon = "📅";
+                } else if (reminder.type && reminder.type.toLowerCase().includes("bill")) {
+                    icon = "💵";
+                }
+
+                html += `
+                    <div class="task-row">
+                        <div class="task-icon">${icon}</div>
+
+                        <div>
+                            <strong>${reminder.title}</strong><br>
+                            <small>${reminder.type}</small>
+                        </div>
+
+                        <span class="status-badge pending-badge">⏳ Pending</span>
+
+                        <button class="complete-btn" onclick="completeReminder(${reminder.id})">
+                            Complete
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        html += `<h3 class="dashboard-small-title completed-title">Completed Tasks</h3>`;
+
+        if (completedReminders.length === 0) {
+            html += `
+                <div class="task-row task-row-completed">
+                    <div class="task-icon">📭</div>
+                    <div>
+                        <strong>No completed tasks yet</strong><br>
+                        <small>Completed tasks will show here.</small>
+                    </div>
+                    <span class="status-badge pending-badge">Waiting</span>
+                    <button class="complete-btn disabled-btn">--</button>
+                </div>
+            `;
+        } else {
+            completedReminders.forEach(reminder => {
+                let icon = "✅";
+
+                html += `
+                    <div class="task-row task-row-completed">
+                        <div class="task-icon completed-icon">${icon}</div>
+
+                        <div>
+                            <strong>${reminder.title}</strong><br>
+                            <small>You completed this task.</small>
+                        </div>
+
+                        <span class="status-badge completed-badge">✅ Completed</span>
+
+                        <button class="complete-btn disabled-btn">
+                            Done
+                        </button>
+                    </div>
+                `;
+            });
+        }
 
         dashboardTasks.innerHTML = html;
 
     } catch (error) {
         dashboardTasks.innerHTML = "<p>Backend is not running.</p>";
     }
+
+
 }
 
 /* ===================== MOODS ===================== */
