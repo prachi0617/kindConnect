@@ -2,6 +2,7 @@
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/model/Message.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/service/ReminderService.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/model/SmartChatMessage.java
+/Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/dto/MoodSupportResponse.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/repository/HelpRequestRepository.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/service/OpenAIService.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/controller/MessageController.java
@@ -24,6 +25,8 @@
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/service/HelpRequestService.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/repository/MessageRepository.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/dto/ChatRequest.java
+/Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/service/MoodSupportService.java
+/Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/controller/MoodSupportController.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/repository/VolunteerRepository.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/controller/HelpRequestController.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/controller/SmartChatController.java
@@ -38,6 +41,7 @@
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/model/User.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/repository/UserRepository.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/controller/HomeController.java
+/Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/controller/VolunteerMatchController.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/controller/ResourceController.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/dto/AgentChatResponse.java
 /Users/prachi/Projects/kindConnect/src/main/java/com/kindconnect/repository/ResourceRepository.java

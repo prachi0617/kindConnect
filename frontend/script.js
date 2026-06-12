@@ -142,9 +142,7 @@ async function saveMessageFromWebsite() {
     try {
         const response = await fetch(`${API}/api/messages`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(message)
         });
 
@@ -211,9 +209,7 @@ function openSettings() {
 async function callKindConnectAI(message) {
     const response = await fetch(`${API}/chat`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             userId: 1,
             message: message
@@ -746,35 +742,107 @@ async function saveMood() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(mood)
         });
+    } catch (error) {
+        console.log("Mood save failed, but mood support popup will still show.");
+    }
 
-        showMoodSuggestionPopup(moodValue);
+    showBackendMoodPopup(moodValue);
+}
+
+async function showBackendMoodPopup(moodValue) {
+    try {
+        const response = await fetch(`${API}/api/mood-support/${moodValue}`);
+
+        if (!response.ok) {
+            throw new Error("Mood support backend not found.");
+        }
+
+        const support = await response.json();
+
+        let suggestionsHtml = "";
+        support.suggestions.forEach(item => {
+            suggestionsHtml += `<p>${item}</p>`;
+        });
+
+        let buttonsHtml = "";
+        support.buttons.forEach(button => {
+            if (button === "Laugh Video") {
+                buttonsHtml += `<button onclick="openLaughVideo()">😂 Laugh Video</button>`;
+            }
+
+            if (button === "Happy Playlist") {
+                buttonsHtml += `<button onclick="openHappyPlaylist()">🎵 Happy Playlist</button>`;
+            }
+
+            if (button === "Funny Talk") {
+                buttonsHtml += `<button onclick="openSadFunnyTalk()">🎤 Funny Talk</button>`;
+            }
+
+            if (button === "Friendly Call") {
+                buttonsHtml += `<button onclick="openHelpRequest('Friendly Call')">☎️ Friendly Call</button>`;
+            }
+
+            if (button === "Comfort Movie") {
+                buttonsHtml += `<button onclick="openComfortMovie()">🎬 Comfort Movie</button>`;
+            }
+
+            if (button === "Kind Talk") {
+                buttonsHtml += `<button onclick="openLonelyKindTalk()">💬 Kind Talk</button>`;
+            }
+
+            if (button === "Relaxing Music") {
+                buttonsHtml += `<button onclick="openRelaxingMusic()">🌿 Relaxing Music</button>`;
+            }
+
+            if (button === "Concerts Near Me") {
+                buttonsHtml += `<button onclick="openConcertsNearMe()">🎤 Concerts Near Me</button>`;
+            }
+
+            if (button === "Funny Break") {
+                buttonsHtml += `<button onclick="openStressFunnyBreak()">😂 Funny Break</button>`;
+            }
+        });
+
+        const moodClass = support.mood.toLowerCase() + "-flyer";
+
+        openModal(support.flyerTitle, `
+            <div class="mood-flyer ${moodClass}">
+                <h1>${support.title}</h1>
+                <p>${support.message}</p>
+
+                <div class="flyer-box">
+                    <h3>Suggestions:</h3>
+                    ${suggestionsHtml}
+                </div>
+
+                <h2>KindConnect is here with you 💙</h2>
+
+                <div class="popup-button-row">
+                    ${buttonsHtml}
+                </div>
+            </div>
+        `);
 
     } catch (error) {
-        showMoodSuggestionPopup(moodValue);
+        showFrontendBackupMoodPopup(moodValue);
     }
 }
 
-function showMoodSuggestionPopup(mood) {
-    const selectedMood = mood.toLowerCase();
+function showFrontendBackupMoodPopup(moodValue) {
+    const selectedMood = moodValue.toLowerCase();
 
     if (selectedMood === "sad") {
         openModal("Sad Support", `
             <div class="mood-flyer sad-flyer">
                 <h1>💙 A Little Smile For You</h1>
-
-                <p>
-                    Feeling sad is okay. Let’s try something small that can help your heart feel lighter.
-                </p>
+                <p>Feeling sad is okay. Let’s try something small that can help your heart feel lighter.</p>
 
                 <div class="flyer-box">
-                    <h3>Try one happy step:</h3>
+                    <h3>Suggestions:</h3>
                     <p>😂 Watch a laugh video</p>
                     <p>🎵 Play a happy playlist</p>
                     <p>🎤 Read a quick funny talk</p>
-                    <p>🌟 Remember: this feeling will pass</p>
                 </div>
-
-                <h2>KindConnect is here with you 💙</h2>
 
                 <div class="popup-button-row">
                     <button onclick="openLaughVideo()">😂 Laugh Video</button>
@@ -789,21 +857,14 @@ function showMoodSuggestionPopup(mood) {
         openModal("Lonely Support", `
             <div class="mood-flyer lonely-flyer">
                 <h1>💜 You Are Not Alone</h1>
-
-                <p>
-                    Feeling lonely happens, but you do not have to sit with it alone.
-                    Try one connection step right now.
-                </p>
+                <p>Feeling lonely happens, but you do not have to sit with it alone.</p>
 
                 <div class="flyer-box">
-                    <h3>Connection ideas:</h3>
+                    <h3>Suggestions:</h3>
                     <p>☎️ Request a friendly call</p>
                     <p>🎬 Watch comfort movie clips</p>
-                    <p>😂 Watch something funny</p>
                     <p>💬 Read a kind message</p>
                 </div>
-
-                <h2>You matter. Your presence matters 💜</h2>
 
                 <div class="popup-button-row">
                     <button onclick="openHelpRequest('Friendly Call')">☎️ Friendly Call</button>
@@ -818,20 +879,14 @@ function showMoodSuggestionPopup(mood) {
         openModal("Stress Support", `
             <div class="mood-flyer stressed-flyer">
                 <h1>🌿 Pause. Breathe. Reset.</h1>
-
-                <p>
-                    Stress can feel heavy. Let’s give your mind a short break with something relaxing or fun.
-                </p>
+                <p>Stress can feel heavy. Let’s give your mind a short break with something relaxing or fun.</p>
 
                 <div class="flyer-box">
-                    <h3>Reset ideas:</h3>
+                    <h3>Suggestions:</h3>
                     <p>🌬️ Take 3 slow breaths</p>
-                    <p>😂 Watch one funny video</p>
                     <p>🎵 Listen to calm music</p>
                     <p>🎤 Find concerts or events near you</p>
                 </div>
-
-                <h2>You are doing your best 💚</h2>
 
                 <div class="popup-button-row">
                     <button onclick="openRelaxingMusic()">🌿 Relaxing Music</button>
@@ -977,20 +1032,51 @@ function openHelpRequest(type) {
         <div class="form-group">
             <label>Request Type</label>
             <select id="helpType">
+                <option ${type === "Friendly Call" ? "selected" : ""}>Friendly Call</option>
                 <option ${type === "Grocery Help" ? "selected" : ""}>Grocery Help</option>
                 <option ${type === "Ride Help" ? "selected" : ""}>Ride Help</option>
                 <option ${type === "Tech Help" ? "selected" : ""}>Tech Help</option>
-                <option ${type === "Friendly Call" ? "selected" : ""}>Friendly Call</option>
                 <option ${type === "General Help" ? "selected" : ""}>General Help</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label>Message</label>
-            <textarea id="helpMessage" placeholder="What help do you need?"></textarea>
+            <label>Preferred Day</label>
+            <select id="preferredDay">
+                <option>Today</option>
+                <option>Tomorrow</option>
+                <option>This Weekend</option>
+                <option>Any Day</option>
+            </select>
         </div>
 
-        <button class="modal-action" onclick="saveHelpRequest()">Submit Help Request</button>
+        <div class="form-group">
+            <label>Preferred Time</label>
+            <select id="preferredTime">
+                <option>Morning</option>
+                <option>Afternoon</option>
+                <option>Evening</option>
+                <option>Any Time</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Urgency</label>
+            <select id="urgency">
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Reason / Message</label>
+            <textarea id="helpMessage" placeholder="Example: I feel lonely and would like a friendly call."></textarea>
+        </div>
+
+        <button class="modal-action" onclick="saveHelpRequest()">Submit Request</button>
+        <button class="modal-action" onclick="openHelpRequestList()">View Requests</button>
+
         <div id="helpResult" class="result-box"></div>
     `);
 }
@@ -999,7 +1085,12 @@ async function saveHelpRequest() {
     const request = {
         userId: Number(document.getElementById("helpUserId").value),
         requestType: document.getElementById("helpType").value,
-        message: document.getElementById("helpMessage").value
+        preferredDay: document.getElementById("preferredDay").value,
+        preferredTime: document.getElementById("preferredTime").value,
+        urgency: document.getElementById("urgency").value,
+        message: document.getElementById("helpMessage").value,
+        status: "Pending",
+        completed: false
     };
 
     try {
@@ -1010,67 +1101,78 @@ async function saveHelpRequest() {
         });
 
         const data = await response.json();
-        document.getElementById("helpResult").innerText =
-            "Saved:\n" + JSON.stringify(data, null, 2);
+
+        document.getElementById("helpResult").innerHTML = `
+            <div class="success-box">
+                ✅ Request submitted successfully.<br>
+                Status: ${data.status}<br>
+                Request ID: ${data.id}
+            </div>
+
+            <button class="modal-action" onclick="matchHelpRequest(${data.id})">
+                Match With Volunteer
+            </button>
+        `;
+
     } catch (error) {
         document.getElementById("helpResult").innerText =
-            "Help request backend is not added yet, but this frontend is ready.";
+            "Could not submit help request. Make sure backend is running.";
     }
 }
 
-function openVolunteerForm() {
-    openModal("Become a Volunteer", `
-        <div class="form-group">
-            <label>Name</label>
-            <input id="volunteerName" placeholder="Your name">
-        </div>
-
-        <div class="form-group">
-            <label>Email</label>
-            <input id="volunteerEmail" placeholder="email@example.com">
-        </div>
-
-        <div class="form-group">
-            <label>Skill</label>
-            <select id="volunteerSkill">
-                <option>Grocery Help</option>
-                <option>Ride Help</option>
-                <option>Tech Help</option>
-                <option>Friendly Call</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Availability</label>
-            <input id="volunteerAvailability" placeholder="Weekends, evenings, etc.">
-        </div>
-
-        <button class="modal-action" onclick="saveVolunteer()">Save Volunteer</button>
-        <div id="volunteerResult" class="result-box"></div>
-    `);
-}
-
-async function saveVolunteer() {
-    const volunteer = {
-        name: document.getElementById("volunteerName").value,
-        email: document.getElementById("volunteerEmail").value,
-        skill: document.getElementById("volunteerSkill").value,
-        availability: document.getElementById("volunteerAvailability").value
-    };
+async function openHelpRequestList() {
+    openModal("Help Requests", "<p>Loading requests...</p>");
 
     try {
-        const response = await fetch(`${API}/api/volunteers`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(volunteer)
+        const response = await fetch(`${API}/api/help-requests`);
+        const requests = await response.json();
+
+        let html = "";
+
+        requests.forEach(request => {
+            html += `
+                <div class="info-card">
+                    <h3>☎️ ${request.requestType}</h3>
+                    <p><strong>Message:</strong> ${request.message || "No message"}</p>
+                    <p><strong>Preferred Day:</strong> ${request.preferredDay || "Any Day"}</p>
+                    <p><strong>Preferred Time:</strong> ${request.preferredTime || "Any Time"}</p>
+                    <p><strong>Urgency:</strong> ${request.urgency || "Low"}</p>
+                    <p><strong>Status:</strong> ${request.status || "Pending"}</p>
+
+                    <button class="modal-action" onclick="matchHelpRequest(${request.id})">
+                        Match Volunteer
+                    </button>
+                </div>
+            `;
         });
 
-        const data = await response.json();
-        document.getElementById("volunteerResult").innerText =
-            "Saved:\n" + JSON.stringify(data, null, 2);
+        document.getElementById("modalBody").innerHTML =
+            html || "<p>No help requests yet.</p>";
+
     } catch (error) {
-        document.getElementById("volunteerResult").innerText =
-            "Volunteer backend is not added yet, but this frontend is ready.";
+        document.getElementById("modalBody").innerHTML =
+            "<p>Could not load help requests.</p>";
+    }
+}
+
+async function matchHelpRequest(id) {
+    try {
+        const response = await fetch(`${API}/api/matches/help-request/${id}`);
+        const text = await response.text();
+
+        openModal("Volunteer Match Result", `
+            <div class="match-card">
+                <h2>🤝 Match Result</h2>
+                <p>${text}</p>
+
+                <button class="modal-action" onclick="openHelpRequestList()">
+                    Back to Requests
+                </button>
+            </div>
+        `);
+
+    } catch (error) {
+        alert("Could not match volunteer.");
     }
 }
 

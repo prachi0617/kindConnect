@@ -3,7 +3,6 @@ package com.kindconnect.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "volunteer")
 public class Volunteer {
 
     @Id
@@ -13,18 +12,16 @@ public class Volunteer {
     private String name;
     private String email;
     private String phone;
-    private String skillType;
-    private Boolean available;
+    private String skill;
+    private String availableDay;
+    private String availableTime;
+
+    @Column(length = 1000)
+    private String note;
+
+    private Boolean active = true;
 
     public Volunteer() {
-    }
-
-    public Volunteer(String name, String email, String phone, String skillType, Boolean available) {
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.skillType = skillType;
-        this.available = available;
     }
 
     public Long getId() {
@@ -43,12 +40,24 @@ public class Volunteer {
         return phone;
     }
 
-    public String getSkillType() {
-        return skillType;
+    public String getSkill() {
+        return skill;
     }
 
-    public Boolean getAvailable() {
-        return available;
+    public String getAvailableDay() {
+        return availableDay;
+    }
+
+    public String getAvailableTime() {
+        return availableTime;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public Boolean getActive() {
+        return active;
     }
 
     public void setId(Long id) {
@@ -67,11 +76,23 @@ public class Volunteer {
         this.phone = phone;
     }
 
-    public void setSkillType(String skillType) {
-        this.skillType = skillType;
+    public void setSkill(String skill) {
+        this.skill = skill;
     }
 
-    public void setAvailable(Boolean available) {
-        this.available = available;
+    public void setAvailableDay(String availableDay) {
+        this.availableDay = availableDay;
+    }
+
+    public void setAvailableTime(String availableTime) {
+        this.availableTime = availableTime;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

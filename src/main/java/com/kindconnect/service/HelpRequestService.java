@@ -20,41 +20,36 @@ public class HelpRequestService {
     }
 
     public HelpRequest createHelpRequest(HelpRequest helpRequest) {
+        if (helpRequest.getCompleted() == null) {
+            helpRequest.setCompleted(false);
+        }
+
         if (helpRequest.getStatus() == null || helpRequest.getStatus().isBlank()) {
-            helpRequest.setStatus("OPEN");
+            helpRequest.setStatus("Pending");
         }
 
         return helpRequestRepository.save(helpRequest);
     }
 
-    public List<HelpRequest> getHelpRequestsByUser(Long userId) {
-        return helpRequestRepository.findByUserId(userId);
-    }
-
-    public List<HelpRequest> getHelpRequestsByType(String requestType) {
-        return helpRequestRepository.findByRequestTypeIgnoreCase(requestType);
-    }
-
-    public List<HelpRequest> getOpenHelpRequests() {
-        return helpRequestRepository.findByStatusIgnoreCase("OPEN");
-    }
-
-    public HelpRequest assignVolunteer(Long requestId, Long volunteerId) {
-        HelpRequest helpRequest = helpRequestRepository.findById(requestId)
+    public HelpRequest completeHelpRequest(Long id) {
+        HelpRequest request = helpRequestRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Help request not found"));
 
-        helpRequest.setVolunteerId(volunteerId);
-        helpRequest.setStatus("ASSIGNED");
+        request.setCompleted(true);
+        request.setStatus("Completed");
 
-        return helpRequestRepository.save(helpRequest);
+        return helpRequestRepository.save(request);
     }
 
-    public HelpRequest completeHelpRequest(Long requestId) {
-        HelpRequest helpRequest = helpRequestRepository.findById(requestId)
+    public HelpRequest updateStatus(Long id, String status) {
+        HelpRequest request = helpRequestRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Help request not found"));
 
-        helpRequest.setStatus("COMPLETED");
+        request.setStatus(status);
+        return helpRequestRepository.save(request);
+    }
 
-        return helpRequestRepository.save(helpRequest);
+    public void deleteHelpRequest(Long id) {
+        helpRequestRepository.deleteById(id);
     }
 }

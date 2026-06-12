@@ -27,30 +27,18 @@ public class HelpRequestController {
         return helpRequestService.createHelpRequest(helpRequest);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<HelpRequest> getHelpRequestsByUser(@PathVariable Long userId) {
-        return helpRequestService.getHelpRequestsByUser(userId);
+    @PutMapping("/{id}/complete")
+    public HelpRequest completeHelpRequest(@PathVariable Long id) {
+        return helpRequestService.completeHelpRequest(id);
     }
 
-    @GetMapping("/type/{requestType}")
-    public List<HelpRequest> getHelpRequestsByType(@PathVariable String requestType) {
-        return helpRequestService.getHelpRequestsByType(requestType);
+    @PutMapping("/{id}/status/{status}")
+    public HelpRequest updateStatus(@PathVariable Long id, @PathVariable String status) {
+        return helpRequestService.updateStatus(id, status);
     }
 
-    @GetMapping("/open")
-    public List<HelpRequest> getOpenHelpRequests() {
-        return helpRequestService.getOpenHelpRequests();
-    }
-
-    @PutMapping("/{requestId}/assign/{volunteerId}")
-    public HelpRequest assignVolunteer(
-            @PathVariable Long requestId,
-            @PathVariable Long volunteerId) {
-        return helpRequestService.assignVolunteer(requestId, volunteerId);
-    }
-
-    @PutMapping("/{requestId}/complete")
-    public HelpRequest completeHelpRequest(@PathVariable Long requestId) {
-        return helpRequestService.completeHelpRequest(requestId);
+    @DeleteMapping("/{id}")
+    public void deleteHelpRequest(@PathVariable Long id) {
+        helpRequestService.deleteHelpRequest(id);
     }
 }

@@ -20,18 +20,14 @@ public class VolunteerService {
     }
 
     public Volunteer createVolunteer(Volunteer volunteer) {
-        if (volunteer.getAvailable() == null) {
-            volunteer.setAvailable(true);
+        if (volunteer.getActive() == null) {
+            volunteer.setActive(true);
         }
 
         return volunteerRepository.save(volunteer);
     }
 
-    public List<Volunteer> getAvailableVolunteers() {
-        return volunteerRepository.findByAvailableTrue();
-    }
-
-    public List<Volunteer> getAvailableVolunteersBySkill(String skillType) {
-        return volunteerRepository.findBySkillTypeIgnoreCaseAndAvailableTrue(skillType);
+    public void deleteVolunteer(Long id) {
+        volunteerRepository.deleteById(id);
     }
 }

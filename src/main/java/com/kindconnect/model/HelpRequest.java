@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "help_request")
 public class HelpRequest {
 
     @Id
@@ -13,35 +12,20 @@ public class HelpRequest {
     private Long id;
 
     private Long userId;
-
     private String requestType;
 
-    private String title;
-
     @Column(length = 1000)
-    private String description;
+    private String message;
 
-    private String status;
+    private String preferredDay;
+    private String preferredTime;
+    private String urgency;
 
-    private LocalDate date;
+    private String status = "Pending";
 
-    private LocalTime time;
-
-    private Long volunteerId;
+    private Boolean completed = false;
 
     public HelpRequest() {
-    }
-
-    public HelpRequest(Long userId, String requestType, String title, String description, String status, LocalDate date,
-            LocalTime time, Long volunteerId) {
-        this.userId = userId;
-        this.requestType = requestType;
-        this.title = title;
-        this.description = description;
-        this.status = status;
-        this.date = date;
-        this.time = time;
-        this.volunteerId = volunteerId;
     }
 
     public Long getId() {
@@ -56,28 +40,28 @@ public class HelpRequest {
         return requestType;
     }
 
-    public String getTitle() {
-        return title;
+    public String getMessage() {
+        return message;
     }
 
-    public String getDescription() {
-        return description;
+    public String getPreferredDay() {
+        return preferredDay;
+    }
+
+    public String getPreferredTime() {
+        return preferredTime;
+    }
+
+    public String getUrgency() {
+        return urgency;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public Long getVolunteerId() {
-        return volunteerId;
+    public Boolean getCompleted() {
+        return completed;
     }
 
     public void setId(Long id) {
@@ -92,27 +76,27 @@ public class HelpRequest {
         this.requestType = requestType;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPreferredDay(String preferredDay) {
+        this.preferredDay = preferredDay;
+    }
+
+    public void setPreferredTime(String preferredTime) {
+        this.preferredTime = preferredTime;
+    }
+
+    public void setUrgency(String urgency) {
+        this.urgency = urgency;
     }
 
     public void setStatus(String status) {
         this.status = status;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public void setTime(LocalTime time) {
-        this.time = time;
-    }
-
-    public void setVolunteerId(Long volunteerId) {
-        this.volunteerId = volunteerId;
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
     }
 }

@@ -26,4 +26,9 @@ public class VolunteerController {
     public Volunteer createVolunteer(@RequestBody Volunteer volunteer) {
         return volunteerService.createVolunteer(volunteer);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteVolunteer(@PathVariable Long id) {
+        volunteerService.deleteVolunteer(id);
+    }
 }

@@ -1,6 +1,85 @@
 DELETE FROM resource;
 INSERT INTO resource (name, category, description, location, phone)
 VALUES
+(
+  'Zip Code Wilmington',
+  'Tech Help',
+  'Coding bootcamp in Wilmington, Delaware. Students learn Java, software development, backend development, and career skills.',
+  'Wilmington, Delaware',
+  'See official website'
+);
+
+INSERT INTO resource (name, category, description, location, phone)
+VALUES
+(
+  'University of Delaware - Computer & Information Sciences',
+  'Tech Help',
+  'Computer science and information systems programs for students interested in technology careers.',
+  'Newark, Delaware',
+  'See official website'
+);
+
+INSERT INTO resource (name, category, description, location, phone)
+VALUES
+(
+  'Wilmington University - Computer Science',
+  'Tech Help',
+  'Computer Science degree program with online, hybrid, and in-person learning options.',
+  'Wilmington, Delaware',
+  'See official website'
+);
+
+INSERT INTO resource (name, category, description, location, phone)
+VALUES
+(
+  'Delaware Technical Community College - IT and Networking',
+  'Tech Help',
+  'Technology programs focused on IT support, networking, software, security, and computer systems.',
+  'Delaware',
+  'See official website'
+);
+
+INSERT INTO resource (name, category, description, location, phone)
+VALUES
+(
+  'Community College of Philadelphia - Computer Science',
+  'Tech Help',
+  'Computer Science program for students interested in programming, software development, and transfer pathways.',
+  'Philadelphia, Pennsylvania',
+  'See official website'
+);
+
+INSERT INTO resource (name, category, description, location, phone)
+VALUES
+(
+  'Per Scholas Philadelphia',
+  'Tech Help',
+  'Technology training program in Philadelphia with IT and career support.',
+  'Philadelphia, Pennsylvania',
+  'See official website'
+);
+
+INSERT INTO resource (name, category, description, location, phone)
+VALUES
+(
+  'University of Maryland - Computer Science',
+  'Tech Help',
+  'Computer Science program for students interested in programming, software engineering, and computing careers.',
+  'College Park, Maryland',
+  'See official website'
+);
+
+INSERT INTO resource (name, category, description, location, phone)
+VALUES
+(
+  'Montgomery College - Computer Science and Technologies',
+  'Tech Help',
+  'Maryland community college offering technology, computer science, cybersecurity, and IT-related programs.',
+  'Maryland',
+  'See official website'
+);
+INSERT INTO resource (name, category, description, location, phone)
+VALUES
 -- Food
 ('Community Food Center', 'Food', 'Provides food boxes and meal support for families.', 'Wilmington, DE', '302-000-0001'),
 ('Local Food Bank', 'Food', 'Offers free groceries and emergency food assistance.', 'Newark, DE', '302-000-0002'),
