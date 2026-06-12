@@ -24,6 +24,7 @@ function setDashboardDate() {
     });
 
     document.getElementById("dashboardDate").innerText = "📅 " + formattedDate;
+
     const hour = today.getHours();
     let greeting = "";
 
@@ -37,7 +38,11 @@ function setDashboardDate() {
         greeting = "Good night! Take some rest.";
     }
 
-    document.getElementById("dashboardGreeting").innerText = greeting;
+    const greetingElement = document.getElementById("dashboardGreeting");
+
+    if (greetingElement) {
+        greetingElement.innerText = greeting;
+    }
 }
 
 /* ===================== MESSAGES ===================== */
@@ -86,7 +91,6 @@ async function openMessages() {
             "<p>Could not load messages.</p>";
     }
 }
-
 
 function openAddMessageForm() {
     openModal("Add New Message", `
@@ -151,7 +155,7 @@ async function saveMessageFromWebsite() {
 
     } catch (error) {
         document.getElementById("messageResult").innerText =
-            "Could not save message. Make sure backend is running.";
+            "Could not save message.";
     }
 }
 
@@ -418,75 +422,6 @@ function openResourcesAll() {
     loadResources();
 }
 
-async function openResourceCategory(category) {
-    openModal(category + " Resources", `<p>Loading...</p>`);
-
-    try {
-        const response = await fetch(`${API}/api/resources`);
-        const resources = await response.json();
-
-        const filtered = resources.filter(r =>
-            r.category && r.category.toLowerCase() === category.toLowerCase()
-        );
-
-        let html = "";
-
-        filtered.forEach(resource => {
-            html += `
-                <div class="info-card">
-                    <h3>${resource.name}</h3>
-                    <p><strong>Description:</strong> ${resource.description}</p>
-                    <p><strong>Location:</strong> ${resource.location}</p>
-                    <p><strong>Phone:</strong> ${resource.phone}</p>
-                </div>
-            `;
-        });
-
-        document.getElementById("modalBody").innerHTML =
-            filtered.length > 0 ? html : `<p>No ${category} resources available right now.</p>`;
-
-    } catch (error) {
-        document.getElementById("modalBody").innerHTML = "<p>Could not load resources.</p>";
-    }
-}
-
-async function openResourceCategory(category) {
-    openModal(category + " Resources", `<p>Loading...</p>`);
-
-    try {
-        const response = await fetch(`${API}/api/resources`);
-        const resources = await response.json();
-
-        const filtered = resources.filter(r =>
-            r.category && r.category.toLowerCase() === category.toLowerCase()
-        );
-
-        let html = `
-            <div class="info-card">
-               <h3> ${category} resources found</h3>
-                <p>Scroll inside this popup to view all resources.</p>
-            </div>
-        `;
-
-        filtered.forEach(resource => {
-            html += `
-                <div class="info-card">
-                    <h3>${resource.name}</h3>
-                    <p><strong>Description:</strong> ${resource.description}</p>
-                    <p><strong>Location:</strong> ${resource.location}</p>
-                    <p><strong>Phone:</strong> ${resource.phone}</p>
-                </div>
-            `;
-        });
-
-        document.getElementById("modalBody").innerHTML =
-            filtered.length > 0 ? html : `<p>No ${category} resources found.</p>`;
-    } catch (error) {
-        document.getElementById("modalBody").innerHTML = "<p>Could not load resources.</p>";
-    }
-
-}
-
 async function loadResources() {
     try {
         const response = await fetch(`${API}/api/resources`);
@@ -514,8 +449,41 @@ async function loadResources() {
     }
 }
 
+async function openResourceCategory(category) {
+    openModal(category + " Resources", `<p>Loading...</p>`);
+
+    try {
+        const response = await fetch(`${API}/api/resources`);
+        const resources = await response.json();
+
+        const filtered = resources.filter(resource =>
+            resource.category &&
+            resource.category.toLowerCase() === category.toLowerCase()
+        );
+
+        let html = "";
+
+        filtered.forEach(resource => {
+            html += `
+                <div class="info-card">
+                    <h3>${resource.name}</h3>
+                    <p><strong>Description:</strong> ${resource.description}</p>
+                    <p><strong>Location:</strong> ${resource.location}</p>
+                    <p><strong>Phone:</strong> ${resource.phone}</p>
+                </div>
+            `;
+        });
+
+        document.getElementById("modalBody").innerHTML =
+            filtered.length > 0 ? html : `<p>No ${category} resources available right now.</p>`;
+
+    } catch (error) {
+        document.getElementById("modalBody").innerHTML = "<p>Could not load resources.</p>";
+    }
+}
+
 /* ===================== REMINDERS ===================== */
-d
+
 function openReminderForm(type) {
     openModal("Add Daily Reminder", `
         <div class="form-group">
@@ -625,8 +593,6 @@ async function completeReminder(id) {
     }
 }
 
-/* ===================== Dashboard ===================== */
-
 async function loadDashboardData() {
     const dashboardTasks = document.getElementById("dashboardTasks");
     dashboardTasks.innerHTML = "<p>Loading reminders...</p>";
@@ -703,11 +669,9 @@ async function loadDashboardData() {
             `;
         } else {
             completedReminders.forEach(reminder => {
-                let icon = "✅";
-
                 html += `
                     <div class="task-row task-row-completed">
-                        <div class="task-icon completed-icon">${icon}</div>
+                        <div class="task-icon completed-icon">✅</div>
 
                         <div>
                             <strong>${reminder.title}</strong><br>
@@ -729,8 +693,6 @@ async function loadDashboardData() {
     } catch (error) {
         dashboardTasks.innerHTML = "<p>Backend is not running.</p>";
     }
-
-
 }
 
 /* ===================== MOODS ===================== */
@@ -745,11 +707,9 @@ function openMoodForm() {
         <div class="form-group">
             <label>Mood</label>
             <select id="moodValue">
-                <option>Happy</option>
-                <option>Sad</option>
-                <option>Lonely</option>
-                <option>Stressed</option>
-                <option>Tired</option>
+                <option value="Sad">Sad</option>
+                <option value="Lonely">Lonely</option>
+                <option value="Stressed">Stressed</option>
             </select>
         </div>
 
@@ -770,49 +730,238 @@ function openMoodForm() {
 }
 
 async function saveMood() {
+    const moodValue = document.getElementById("moodValue").value;
+    const moodNote = document.getElementById("moodNote").value;
+
     const mood = {
         userId: Number(document.getElementById("moodUserId").value),
-        mood: document.getElementById("moodValue").value,
-        note: document.getElementById("moodNote").value,
+        mood: moodValue,
+        note: moodNote,
         date: document.getElementById("moodDate").value
     };
 
     try {
-        const response = await fetch(`${API}/api/moods`, {
+        await fetch(`${API}/api/moods`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(mood)
         });
 
-        const data = await response.json();
-        document.getElementById("moodResult").innerText =
-            "Saved:\n" + JSON.stringify(data, null, 2);
+        showMoodSuggestionPopup(moodValue);
+
     } catch (error) {
-        document.getElementById("moodResult").innerText = "Backend is not running.";
+        showMoodSuggestionPopup(moodValue);
     }
 }
 
+function showMoodSuggestionPopup(mood) {
+    const selectedMood = mood.toLowerCase();
+
+    if (selectedMood === "sad") {
+        openModal("Sad Support", `
+            <div class="mood-flyer sad-flyer">
+                <h1>💙 A Little Smile For You</h1>
+
+                <p>
+                    Feeling sad is okay. Let’s try something small that can help your heart feel lighter.
+                </p>
+
+                <div class="flyer-box">
+                    <h3>Try one happy step:</h3>
+                    <p>😂 Watch a laugh video</p>
+                    <p>🎵 Play a happy playlist</p>
+                    <p>🎤 Read a quick funny talk</p>
+                    <p>🌟 Remember: this feeling will pass</p>
+                </div>
+
+                <h2>KindConnect is here with you 💙</h2>
+
+                <div class="popup-button-row">
+                    <button onclick="openLaughVideo()">😂 Laugh Video</button>
+                    <button onclick="openHappyPlaylist()">🎵 Happy Playlist</button>
+                    <button onclick="openSadFunnyTalk()">🎤 Funny Talk</button>
+                </div>
+            </div>
+        `);
+    }
+
+    if (selectedMood === "lonely") {
+        openModal("Lonely Support", `
+            <div class="mood-flyer lonely-flyer">
+                <h1>💜 You Are Not Alone</h1>
+
+                <p>
+                    Feeling lonely happens, but you do not have to sit with it alone.
+                    Try one connection step right now.
+                </p>
+
+                <div class="flyer-box">
+                    <h3>Connection ideas:</h3>
+                    <p>☎️ Request a friendly call</p>
+                    <p>🎬 Watch comfort movie clips</p>
+                    <p>😂 Watch something funny</p>
+                    <p>💬 Read a kind message</p>
+                </div>
+
+                <h2>You matter. Your presence matters 💜</h2>
+
+                <div class="popup-button-row">
+                    <button onclick="openHelpRequest('Friendly Call')">☎️ Friendly Call</button>
+                    <button onclick="openComfortMovie()">🎬 Comfort Movie</button>
+                    <button onclick="openLonelyKindTalk()">💬 Kind Talk</button>
+                </div>
+            </div>
+        `);
+    }
+
+    if (selectedMood === "stressed") {
+        openModal("Stress Support", `
+            <div class="mood-flyer stressed-flyer">
+                <h1>🌿 Pause. Breathe. Reset.</h1>
+
+                <p>
+                    Stress can feel heavy. Let’s give your mind a short break with something relaxing or fun.
+                </p>
+
+                <div class="flyer-box">
+                    <h3>Reset ideas:</h3>
+                    <p>🌬️ Take 3 slow breaths</p>
+                    <p>😂 Watch one funny video</p>
+                    <p>🎵 Listen to calm music</p>
+                    <p>🎤 Find concerts or events near you</p>
+                </div>
+
+                <h2>You are doing your best 💚</h2>
+
+                <div class="popup-button-row">
+                    <button onclick="openRelaxingMusic()">🌿 Relaxing Music</button>
+                    <button onclick="openConcertsNearMe()">🎤 Concerts Near Me</button>
+                    <button onclick="openStressFunnyBreak()">😂 Funny Break</button>
+                </div>
+            </div>
+        `);
+    }
+}
+
+/* ===== MOOD LINKS ===== */
+
+function openLaughVideo() {
+    window.open("https://www.youtube.com/results?search_query=funny+videos+to+make+you+laugh", "_blank");
+}
+
+function openHappyPlaylist() {
+    window.open("https://www.youtube.com/results?search_query=happy+songs+playlist", "_blank");
+}
+
+function openRelaxingMusic() {
+    window.open("https://www.youtube.com/results?search_query=relaxing+music+for+stress+relief", "_blank");
+}
+
+function openComfortMovie() {
+    window.open("https://www.youtube.com/results?search_query=comfort+movie+clips+funny+scenes", "_blank");
+}
+
+function openConcertsNearMe() {
+    window.open("https://www.google.com/search?q=concerts+near+me+this+weekend", "_blank");
+}
+
+/* ===== SECOND POPUPS ===== */
+
+function openSadFunnyTalk() {
+    openModal("Funny Talk For Sad Mood", `
+        <div class="funny-talk-card">
+            <h2>😂 Tiny Laugh Break</h2>
+
+            <p><strong>Joke 1:</strong> Why did the cookie go to the doctor?</p>
+            <p>Because it felt crumby.</p>
+
+            <p><strong>Joke 2:</strong> Why did the phone need glasses?</p>
+            <p>Because it lost all its contacts.</p>
+
+            <p><strong>Joke 3:</strong> Why did the banana go to the party?</p>
+            <p>Because it was a-peeling.</p>
+
+            <p class="kind-line">
+                You do not have to feel better all at once. One small smile counts 💙
+            </p>
+
+            <button class="modal-action" onclick="openLaughVideo()">Watch Laugh Video</button>
+            <button class="modal-action" onclick="openHappyPlaylist()">Play Happy Music</button>
+        </div>
+    `);
+}
+
+function openLonelyKindTalk() {
+    openModal("Kind Talk", `
+        <div class="kind-talk-card">
+            <h2>💜 Kind Talk</h2>
+
+            <p>You are not invisible.</p>
+            <p>You are allowed to need connection.</p>
+            <p>A small call, song, or funny video can be a first step.</p>
+
+            <div class="flyer-box">
+                <h3>Try this now:</h3>
+                <p>☎️ Ask for a friendly call</p>
+                <p>🎵 Play one song you like</p>
+                <p>😂 Watch one short funny clip</p>
+                <p>💬 Send one message to someone you trust</p>
+            </div>
+
+            <button class="modal-action" onclick="openHelpRequest('Friendly Call')">Request Friendly Call</button>
+            <button class="modal-action" onclick="openLaughVideo()">Watch Funny Video</button>
+        </div>
+    `);
+}
+
+function openStressFunnyBreak() {
+    openModal("Stress Funny Break", `
+        <div class="stress-break-card">
+            <h2>🌿 60 Second Reset</h2>
+
+            <p><strong>Step 1:</strong> Relax your shoulders.</p>
+            <p><strong>Step 2:</strong> Take one deep breath.</p>
+            <p><strong>Step 3:</strong> Watch something funny or play calm music.</p>
+
+            <div class="flyer-box">
+                <h3>Quick choice:</h3>
+                <p>😂 Laugh first if your mind feels too full</p>
+                <p>🎵 Calm music if your body feels tense</p>
+                <p>🎤 Concerts near you if you need something to look forward to</p>
+            </div>
+
+            <button class="modal-action" onclick="openLaughVideo()">Funny Video</button>
+            <button class="modal-action" onclick="openRelaxingMusic()">Calm Music</button>
+            <button class="modal-action" onclick="openConcertsNearMe()">Concerts Near Me</button>
+        </div>
+    `);
+}
+
+/* ===================== MOOD HISTORY ===================== */
+
 async function openMoodList() {
-    openModal("Mood History", "<p>Loading moods...</p>");
+    openModal("Mood History", "<p>Loading mood history...</p>");
 
     try {
         const response = await fetch(`${API}/api/moods`);
         const moods = await response.json();
 
         let html = "";
+
         moods.forEach(mood => {
             html += `
                 <div class="info-card">
-                    <h3>${mood.mood}</h3>
+                    <h3>💜 ${mood.mood}</h3>
                     <p><strong>Note:</strong> ${mood.note}</p>
                     <p><strong>Date:</strong> ${mood.date}</p>
                 </div>
             `;
         });
 
-        document.getElementById("modalBody").innerHTML = html || "<p>No mood check-ins yet.</p>";
+        document.getElementById("modalBody").innerHTML = html || "<p>No mood history yet.</p>";
+
     } catch (error) {
-        document.getElementById("modalBody").innerHTML = "<p>Backend is not running.</p>";
+        document.getElementById("modalBody").innerHTML = "<p>Could not load mood history.</p>";
     }
 }
 
