@@ -589,6 +589,9 @@ async function completeReminder(id) {
     }
 }
 
+
+/* ===================== Dashboards ===================== */
+
 async function loadDashboardData() {
     const dashboardTasks = document.getElementById("dashboardTasks");
     dashboardTasks.innerHTML = "<p>Loading reminders...</p>";
@@ -597,97 +600,171 @@ async function loadDashboardData() {
         const response = await fetch(`${API}/api/reminders`);
         const reminders = await response.json();
 
-        const pendingReminders = reminders.filter(reminder => reminder.completed === false);
-        const completedReminders = reminders.filter(reminder => reminder.completed === true);
-
         let html = "";
 
-        html += `<h3 class="dashboard-small-title">Pending Tasks</h3>`;
+        if (reminders.length === 0) {
+            dashboardTasks.innerHTML = `
+                <div class="task-row">
+                    <div class="task-icon">📭</div>
 
-        if (pendingReminders.length === 0) {
-            html += `
-                <div class="task-row task-row-completed">
-                    <div class="task-icon">✅</div>
                     <div>
-                        <strong>No pending tasks</strong><br>
-                        <small>You are all caught up.</small>
+                        <strong>No tasks yet</strong><br>
+                        <small>Add a reminder to see it here.</small>
                     </div>
-                    <span class="status-badge completed-badge">Completed</span>
-                    <button class="complete-btn disabled-btn">Done</button>
+
+                    <span class="task-time">--</span>
+                    <span class="status-badge pending-badge">Pending</span>
                 </div>
             `;
-        } else {
-            pendingReminders.forEach(reminder => {
-                let icon = "🔔";
+            return;
+        }
 
-                if (reminder.type && reminder.type.toLowerCase().includes("medicine")) {
-                    icon = "💊";
-                } else if (reminder.type && reminder.type.toLowerCase().includes("water")) {
-                    icon = "💧";
-                } else if (reminder.type && reminder.type.toLowerCase().includes("appointment")) {
-                    icon = "📅";
-                } else if (reminder.type && reminder.type.toLowerCase().includes("bill")) {
-                    icon = "💵";
-                }
+        reminders.forEach(reminder => {
+            let icon = "🔔";
 
+            if (reminder.type && reminder.type.toLowerCase().includes("medicine")) {
+                icon = "💊";
+            } else if (reminder.type && reminder.type.toLowerCase().includes("water")) {
+                icon = "💧";
+            } else if (reminder.type && reminder.type.toLowerCase().includes("appointment")) {
+                icon = "📅";
+            } else if (reminder.type && reminder.type.toLowerCase().includes("bill")) {
+                icon = "💵";
+            } else if (reminder.type && reminder.type.toLowerCase().includes("self")) {
+                icon = "💜";
+            }
+
+            const status = getReminderStatus(reminder);
+            const statusClass = getStatusClass(status);
+            const timeText = formatReminderTime(reminder.time);
+
+            if (status === "Completed") {
                 html += `
-                    <div class="task-row">
+                    <div class="task-row task-row-completed">
+                        <div class="task-icon completed-icon">${icon}</div>
+
+                        <div>
+                            <strong>${reminder.title}</strong><br>
+                            <small>${reminder.type || "Reminder"}</small>
+                        </div>
+
+                        <span class="task-time">${timeText}</span>
+
+                        <span class="status-badge ${statusClass}">
+                            ✅ ${status}
+                        </span>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="task-row clickable-task" onclick="confirmCompleteReminder(${reminder.id}, '${escapeText(reminder.title)}')">
                         <div class="task-icon">${icon}</div>
 
                         <div>
                             <strong>${reminder.title}</strong><br>
-                            <small>${reminder.type}</small>
+                            <small>${reminder.type || "Reminder"}</small>
                         </div>
 
-                        <span class="status-badge pending-badge">⏳ Pending</span>
+                        <span class="task-time">${timeText}</span>
 
-                        <button class="complete-btn" onclick="completeReminder(${reminder.id})">
-                            Complete
-                        </button>
+                        <span class="status-badge ${statusClass}">
+                            ${status}
+                        </span>
                     </div>
                 `;
-            });
-        }
-
-        html += `<h3 class="dashboard-small-title completed-title">Completed Tasks</h3>`;
-
-        if (completedReminders.length === 0) {
-            html += `
-                <div class="task-row task-row-completed">
-                    <div class="task-icon">📭</div>
-                    <div>
-                        <strong>No completed tasks yet</strong><br>
-                        <small>Completed tasks will show here.</small>
-                    </div>
-                    <span class="status-badge pending-badge">Waiting</span>
-                    <button class="complete-btn disabled-btn">--</button>
-                </div>
-            `;
-        } else {
-            completedReminders.forEach(reminder => {
-                html += `
-                    <div class="task-row task-row-completed">
-                        <div class="task-icon completed-icon">✅</div>
-
-                        <div>
-                            <strong>${reminder.title}</strong><br>
-                            <small>You completed this task.</small>
-                        </div>
-
-                        <span class="status-badge completed-badge">✅ Completed</span>
-
-                        <button class="complete-btn disabled-btn">
-                            Done
-                        </button>
-                    </div>
-                `;
-            });
-        }
+            }
+        });
 
         dashboardTasks.innerHTML = html;
 
     } catch (error) {
         dashboardTasks.innerHTML = "<p>Backend is not running.</p>";
+    }
+}
+function getReminderStatus(reminder) {
+    if (reminder.completed === true) {
+        return "Completed";
+    }
+
+    if (!reminder.date || !reminder.time) {
+        return "Pending";
+    }
+
+    const now = new Date();
+    const reminderDateTime = new Date(`${reminder.date}T${reminder.time}`);
+
+    if (reminderDateTime > now) {
+        return "Upcoming";
+    }
+
+    return "Pending";
+}
+
+function getStatusClass(status) {
+    if (status === "Completed") {
+        return "completed-badge";
+    }
+
+    if (status === "Upcoming") {
+        return "upcoming-badge";
+    }
+
+    return "pending-badge";
+}
+
+function formatReminderTime(time) {
+    if (!time) {
+        return "--";
+    }
+
+    const parts = time.split(":");
+    let hour = Number(parts[0]);
+    const minute = parts[1];
+
+    const ampm = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12;
+    hour = hour ? hour : 12;
+
+    return `${hour}:${minute} ${ampm}`;
+}
+
+function escapeText(text) {
+    if (!text) {
+        return "";
+    }
+
+    return text.replace(/'/g, "\\'");
+}
+
+function confirmCompleteReminder(id, title) {
+    openModal("Complete Task", `
+        <div class="info-card">
+            <h3>✅ Did you complete this task?</h3>
+            <p><strong>${title}</strong></p>
+            <p>Tap the button below if you finished this task.</p>
+
+            <button class="modal-action" onclick="completeReminderFromDashboard(${id})">
+                Yes, Complete Task
+            </button>
+
+            <button class="modal-action" onclick="closeModal()">
+                Cancel
+            </button>
+        </div>
+    `);
+}
+
+async function completeReminderFromDashboard(id) {
+    try {
+        await fetch(`${API}/api/reminders/${id}/complete`, {
+            method: "PUT"
+        });
+
+        closeModal();
+        loadDashboardData();
+
+    } catch (error) {
+        alert("Could not complete task. Make sure backend is running.");
     }
 }
 
@@ -1119,60 +1196,134 @@ async function saveHelpRequest() {
             "Could not submit help request. Make sure backend is running.";
     }
 }
+function openVolunteerSupport() {
+    openModal("Volunteer Support", `
+        <div class="info-card">
+            <h3>🙌 Become a Volunteer</h3>
+            <p>Sign up to help with friendly calls, groceries, rides, or tech help.</p>
+        </div>
 
-async function openHelpRequestList() {
-    openModal("Help Requests", "<p>Loading requests...</p>");
+        <div class="form-group">
+            <label>Name</label>
+            <input id="volunteerName" placeholder="Your name">
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input id="volunteerEmail" placeholder="email@example.com">
+        </div>
+
+        <div class="form-group">
+            <label>Phone</label>
+            <input id="volunteerPhone" placeholder="302-000-1111">
+        </div>
+
+        <div class="form-group">
+            <label>Help Type</label>
+            <select id="volunteerSkill">
+                <option>Friendly Call</option>
+                <option>Grocery Help</option>
+                <option>Ride Help</option>
+                <option>Tech Help</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Available Day</label>
+            <select id="volunteerAvailableDay">
+                <option>Today</option>
+                <option>Tomorrow</option>
+                <option>This Weekend</option>
+                <option>Any Day</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Available Time</label>
+            <select id="volunteerAvailableTime">
+                <option>Morning</option>
+                <option>Afternoon</option>
+                <option>Evening</option>
+                <option>Any Time</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Short Message</label>
+            <textarea id="volunteerNote" placeholder="Example: I can make friendly calls on weekends."></textarea>
+        </div>
+
+        <button class="modal-action" onclick="saveVolunteerSupport()">Save Volunteer</button>
+        <button class="modal-action" onclick="openVolunteerSupportList()">View Volunteers</button>
+
+        <div id="volunteerResult" class="result-box"></div>
+    `);
+}
+
+async function saveVolunteerSupport() {
+    const volunteer = {
+        name: document.getElementById("volunteerName").value,
+        email: document.getElementById("volunteerEmail").value,
+        phone: document.getElementById("volunteerPhone").value,
+        skill: document.getElementById("volunteerSkill").value,
+        availableDay: document.getElementById("volunteerAvailableDay").value,
+        availableTime: document.getElementById("volunteerAvailableTime").value,
+        note: document.getElementById("volunteerNote").value,
+        active: true
+    };
 
     try {
-        const response = await fetch(`${API}/api/help-requests`);
-        const requests = await response.json();
+        const response = await fetch(`${API}/api/volunteers`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(volunteer)
+        });
+
+        const data = await response.json();
+
+        document.getElementById("volunteerResult").innerHTML = `
+            <div class="success-box">
+                ✅ Volunteer saved successfully.<br>
+                Name: ${data.name}<br>
+                Skill: ${data.skill}<br>
+                Available: ${data.availableDay || "Any Day"} at ${data.availableTime || "Any Time"}
+            </div>
+        `;
+
+    } catch (error) {
+        document.getElementById("volunteerResult").innerText =
+            "Could not save volunteer. Make sure backend is running.";
+    }
+}
+
+async function openVolunteerSupportList() {
+    openModal("Volunteer List", "<p>Loading volunteers...</p>");
+
+    try {
+        const response = await fetch(`${API}/api/volunteers`);
+        const volunteers = await response.json();
 
         let html = "";
 
-        requests.forEach(request => {
+        volunteers.forEach(volunteer => {
             html += `
                 <div class="info-card">
-                    <h3>☎️ ${request.requestType}</h3>
-                    <p><strong>Message:</strong> ${request.message || "No message"}</p>
-                    <p><strong>Preferred Day:</strong> ${request.preferredDay || "Any Day"}</p>
-                    <p><strong>Preferred Time:</strong> ${request.preferredTime || "Any Time"}</p>
-                    <p><strong>Urgency:</strong> ${request.urgency || "Low"}</p>
-                    <p><strong>Status:</strong> ${request.status || "Pending"}</p>
-
-                    <button class="modal-action" onclick="matchHelpRequest(${request.id})">
-                        Match Volunteer
-                    </button>
+                    <h3>🙌 ${volunteer.name}</h3>
+                    <p><strong>Email:</strong> ${volunteer.email}</p>
+                    <p><strong>Phone:</strong> ${volunteer.phone || "Not provided"}</p>
+                    <p><strong>Help Type:</strong> ${volunteer.skill}</p>
+                    <p><strong>Available:</strong> ${volunteer.availableDay || "Any Day"} at ${volunteer.availableTime || "Any Time"}</p>
+                    <p><strong>Note:</strong> ${volunteer.note || "No note"}</p>
                 </div>
             `;
         });
 
         document.getElementById("modalBody").innerHTML =
-            html || "<p>No help requests yet.</p>";
+            html || "<p>No volunteers yet.</p>";
 
     } catch (error) {
         document.getElementById("modalBody").innerHTML =
-            "<p>Could not load help requests.</p>";
-    }
-}
-
-async function matchHelpRequest(id) {
-    try {
-        const response = await fetch(`${API}/api/matches/help-request/${id}`);
-        const text = await response.text();
-
-        openModal("Volunteer Match Result", `
-            <div class="match-card">
-                <h2>🤝 Match Result</h2>
-                <p>${text}</p>
-
-                <button class="modal-action" onclick="openHelpRequestList()">
-                    Back to Requests
-                </button>
-            </div>
-        `);
-
-    } catch (error) {
-        alert("Could not match volunteer.");
+            "<p>Could not load volunteers. Make sure backend is running.</p>";
     }
 }
 
