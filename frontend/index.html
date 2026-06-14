@@ -27,9 +27,11 @@
             <button class="login-btn" onclick="openRegister()">Register / Login</button>
         </nav>
     </header>
+
     <section class="hero-small">
         <div class="hero-small-text">
             <h2>Support for Everyone,<br>powered by care and AI.</h2>
+
             <p>
                 KindConnect helps with reminders, mood check-ins, resources,
                 volunteer support, and friendly calls.
@@ -42,7 +44,8 @@
         </div>
 
         <div class="hero-small-image">
-            <img src="images/KindCo.jpg" alt="KindConnect Hero Image" />
+            <img src="images/KindCo.jpg" alt="KindConnect Hero Image">
+        </div>
     </section>
 
     <main class="main">
@@ -86,8 +89,9 @@
                         <p id="dashboardGreeting">Good morning! You’ve got this.</p>
                     </div>
 
-                    <div id="dashboardDate" class="dashboard-date">
-                        📅 Today
+                    <div class="dashboard-date-time">
+                        <div id="dashboardDate" class="dashboard-date">📅 Today</div>
+                        <div id="dashboardTime" class="dashboard-time">🕒 Time</div>
                     </div>
                 </div>
 
@@ -99,7 +103,6 @@
                         <button onclick="openResourcesAll()">📍 Resources</button>
                         <button onclick="openMessages()">✉️ Messages</button>
                         <button onclick="openSettings()">⚙️ Settings</button>
-
                     </div>
 
                     <div class="task-panel">
@@ -143,6 +146,10 @@
 
                     <div class="resource-item" onclick="openResourceCategory('Accessibility')">
                         <span class="emoji">♿</span>Access
+                    </div>
+
+                    <div class="resource-item" onclick="openResourceCategory('Tech Help')">
+                        <span class="emoji">💻</span>Tech Help
                     </div>
                 </div>
 

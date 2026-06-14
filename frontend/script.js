@@ -205,103 +205,105 @@ function openSettings() {
 }
 
 /* ===================== AI CHAT ===================== */
-
 async function callKindConnectAI(message) {
-    const response = await fetch(`${API}/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            userId: 1,
-            message: message
-        })
-    });
+    const controller = new AbortController();
 
-    const text = await response.text();
-
-    if (!response.ok) {
-        throw new Error(text);
-    }
+    const timeoutId = setTimeout(() => {
+        controller.abort();
+    }, 3000);
 
     try {
-        return JSON.parse(text);
-    } catch (error) {
-        return { reply: text };
-    }
-}
+        const response = await fetch(`${API}/chat`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                userId: 1,
+                message: message
+            }),
+            signal: controller.signal
+        });
 
-function openAIChat() {
-    openModal("KindConnect AI Agent", `
-        <div class="info-card">
-            <h3>🤖 AI Support Chat</h3>
-            <p>Type your message, click Send, and continue chatting.</p>
-        </div>
+        clearTimeout(timeoutId);
 
-        <div id="modalAIConversation" class="ai-conversation">
-            <div class="chat-message bot-chat">
-                Hi! I am your KindConnect AI Agent. How can I help you today?
-            </div>
-        </div>
+        const text = await response.text();
 
-        <div class="ai-input-row">
-            <textarea id="modalAIMessage" placeholder="Type your message here..."></textarea>
-            <button onclick="sendModalAIMessage()">Send</button>
-        </div>
-    `);
-}
+        if (!response.ok) {
+            throw new Error(text);
+        }
 
-function addModalChatMessage(text, sender) {
-    const conversation = document.getElementById("modalAIConversation");
-
-    const messageDiv = document.createElement("div");
-    messageDiv.classList.add("chat-message");
-
-    if (sender === "user") {
-        messageDiv.classList.add("user-chat");
-    } else if (sender === "thinking") {
-        messageDiv.classList.add("thinking-chat");
-    } else {
-        messageDiv.classList.add("bot-chat");
-    }
-
-    messageDiv.innerText = text;
-    conversation.appendChild(messageDiv);
-    conversation.scrollTop = conversation.scrollHeight;
-
-    return messageDiv;
-}
-
-async function sendModalAIMessage() {
-    const input = document.getElementById("modalAIMessage");
-    const message = input.value.trim();
-
-    if (message === "") {
-        return;
-    }
-
-    addModalChatMessage(message, "user");
-    input.value = "";
-
-    const thinkingMessage = addModalChatMessage("Thinking...", "thinking");
-
-    try {
-        const data = await callKindConnectAI(message);
-
-        thinkingMessage.className = "chat-message bot-chat";
-
-        if (data.reply) {
-            thinkingMessage.innerText = data.reply;
-        } else {
-            thinkingMessage.innerText = JSON.stringify(data, null, 2);
+        try {
+            return JSON.parse(text);
+        } catch (error) {
+            return { reply: text };
         }
 
     } catch (error) {
-        thinkingMessage.className = "chat-message bot-chat";
-        thinkingMessage.innerText =
-            "AI is not working. Make sure Spring Boot is running on port 8080.\n\n" +
-            error.message;
+        clearTimeout(timeoutId);
+        return getDemoAIResponse(message);
     }
 }
 
+function getDemoAIResponse(message) {
+    const text = message.toLowerCase();
+
+    if (text.includes("hello") || text.includes("hi")) {
+        return {
+            reply: "Hi! I’m your KindConnect AI assistant 💙 I can help with reminders, mood check-ins, resources, friendly calls, and volunteer support."
+        };
+    }
+
+    if (text.includes("sad") || text.includes("lonely") || text.includes("depressed")) {
+        return {
+            reply: "I’m sorry you’re feeling this way 💙 You are not alone. You can do a mood check-in, listen to calming music, or request a friendly call."
+        };
+    }
+
+    if (text.includes("medicine") || text.includes("medication") || text.includes("pill")) {
+        return {
+            reply: "I can help with medicine reminders. Click Daily Reminders, choose Medicine, add the date and time, and it will show on your dashboard."
+        };
+    }
+
+    if (text.includes("appointment") || text.includes("doctor")) {
+        return {
+            reply: "I can help with appointment reminders. Add the appointment date and time, and the dashboard will show it as Pending, Upcoming, or Completed."
+        };
+    }
+
+    if (text.includes("food") || text.includes("grocery") || text.includes("hungry")) {
+        return {
+            reply: "I can help you find food support. Open Community Resources and choose Food. You can also request Grocery Help from a volunteer."
+        };
+    }
+
+    if (text.includes("ride") || text.includes("transportation")) {
+        return {
+            reply: "For transportation support, open Resources and choose Rides. You can also submit a Ride Help request."
+        };
+    }
+
+    if (text.includes("volunteer")) {
+        return {
+            reply: "That’s wonderful 💜 Click Become a Volunteer and choose how you want to help, such as Friendly Call, Grocery Help, Ride Help, or Tech Help."
+        };
+    }
+
+    if (text.includes("tech") || text.includes("computer") || text.includes("laptop")) {
+        return {
+            reply: "For tech support, choose Tech Help in Community Resources. You can also request help from a volunteer."
+        };
+    }
+
+    if (text.includes("reminder") || text.includes("task")) {
+        return {
+            reply: "You can add a reminder from Daily Reminders. After saving it, the dashboard will show the task with time and status."
+        };
+    }
+
+    return {
+        reply: "I’m your KindConnect demo AI assistant 💙 I can help with reminders, mood check-ins, resources, food help, transportation, volunteer support, friendly calls, and tech help. What do you need today?"
+    };
+}
 /* ===================== AUTH ===================== */
 
 function openRegister() {
