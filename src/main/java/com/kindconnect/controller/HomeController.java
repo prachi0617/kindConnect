@@ -8,6 +8,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "KindConnect backend is running.";
+        return "KindConnect backend is running. Testing";
     }
 }
