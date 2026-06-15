@@ -2,79 +2,97 @@ package com.kindconnect.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class OllamaService {
 
-    @Value("${ollama.api.url}")
-    private String ollamaApiUrl;
-
-    @Value("${ollama.model}")
-    private String ollamaModel;
-
+    private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public OllamaService(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+    public OllamaService() {
+        this.restTemplate = new RestTemplate();
+        this.objectMapper = new ObjectMapper();
     }
 
     public String askOllama(String userMessage) {
         try {
-            String prompt = """
-                    You are KindConnect AI Agent.
+            String url = "http://localhost:11434/api/generate";
 
-                    KindConnect helps users with:
-                    - food resources
-                    - healthcare resources
-                    - transportation help
-                    - daily reminders
-                    - mood check-ins
-                    - friendly calls
-                    - volunteer support
-                    - tech help
+            Map<String, Object> request = new HashMap<>();
+            request.put("model", "llama3.2:1b");
+            request.put("prompt", buildPrompt(userMessage));
+            request.put("stream", false);
 
-                    Give a short, friendly, helpful answer.
+            String response = restTemplate.postForObject(url, request, String.class);
 
-                    User message:
-                    %s
-                    """.formatted(userMessage);
+            JsonNode jsonNode = objectMapper.readTree(response);
 
-            Map<String, Object> body = Map.of(
-                    "model", ollamaModel,
-                    "prompt", prompt,
-                    "stream", false);
+            if (jsonNode.has("response")) {
+                String aiReply = jsonNode.get("response").asText();
 
-            String requestBody = objectMapper.writeValueAsString(body);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(ollamaApiUrl))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                    .build();
-
-            HttpClient client = HttpClient.newHttpClient();
-
-            HttpResponse<String> response = client.send(
-                    request,
-                    HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() < 200 || response.statusCode() >= 300) {
-                return "Ollama error: " + response.body();
+                if (aiReply != null && !aiReply.trim().isEmpty()) {
+                    return aiReply.trim();
+                }
             }
 
-            JsonNode root = objectMapper.readTree(response.body());
-            return root.path("response").asText();
+            return fallbackResponse(userMessage);
 
-        } catch (Exception e) {
-            return "Ollama is not running. Start Ollama first. Error: " + e.getMessage();
+        } catch (Exception error) {
+            System.out.println("Ollama is not working: " + error.getMessage());
+            return fallbackResponse(userMessage);
         }
+    }
+
+    private String buildPrompt(String userMessage) {
+        return """
+                You are KindConnect AI Assistant.
+                You help users with:
+                - daily reminders
+                - mood support
+                - food resources
+                - transportation help
+                - volunteer support
+                - friendly calls
+                - community resources
+
+                Be kind, simple, short, and helpful.
+
+                User message:
+                """ + userMessage;
+    }
+
+    private String fallbackResponse(String userMessage) {
+        if (userMessage == null || userMessage.trim().isEmpty()) {
+            return "Hi, I am your AI assistant. How can I help you?";
+        }
+
+        String message = userMessage.toLowerCase();
+
+        if (message.contains("hi") || message.contains("hello")) {
+            return "Hi, I am your KindConnect AI assistant 💙 How can I help you today?";
+        }
+
+        if (message.contains("sad") || message.contains("lonely") || message.contains("stressed")) {
+            return "I am sorry you are feeling this way 💙 I am here with you. You can try a mood check-in, calming music, or request a friendly call.";
+        }
+
+        if (message.contains("medicine") || message.contains("reminder")) {
+            return "I can help with reminders. Click Daily Reminders, choose the date and time, and it will show on your dashboard.";
+        }
+
+        if (message.contains("food")) {
+            return "I can help you find food resources. Open Community Resources and choose Food.";
+        }
+
+        if (message.contains("ride") || message.contains("transportation")) {
+            return "I can help with transportation support. Open Resources and choose Rides.";
+        }
+
+        return "Hi, I am your AI assistant. How can I help you?";
     }
 }

@@ -204,49 +204,121 @@ function openSettings() {
     `);
 }
 
+
 /* ===================== AI CHAT ===================== */
-async function callKindConnectAI(message) {
-    const controller = new AbortController();
 
-    const timeoutId = setTimeout(() => {
-        controller.abort();
-    }, 3000);
+function openAIChat() {
+    openModal("KindConnect AI Assistant", `
+        <div class="ai-chat-wrapper">
+            <div class="ai-chat-header">
+                <div class="ai-chat-icon">🤖</div>
+                
+            </div>
 
-    try {
-        const response = await fetch(`${API}/chat`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                userId: 1,
-                message: message
-            }),
-            signal: controller.signal
-        });
+            <div class="ai-conversation" id="aiChatBox">
+                <div class="chat-message bot-chat">
+                    <strong>KindConnect AI:</strong><br>
+                    Hi! I am your KindConnect assistant ! How can I help you today?
+                </div>
+            </div>
 
-        clearTimeout(timeoutId);
+            <div class="ai-quick-buttons">
+                <button onclick="quickAIMessage('I need help with medicine reminder')">💊 Medicine</button>
+                <button onclick="quickAIMessage('I feel lonely today')">💜 Mood</button>
+                <button onclick="quickAIMessage('I need food resources')">🍏 Food</button>
+                <button onclick="quickAIMessage('I need a ride')">🚗 Ride</button>
+            </div>
 
-        const text = await response.text();
+            <div class="ai-input-row">
+                <textarea 
+                    id="aiMessageInput" 
+                    placeholder="Type your message here..."
+                    onkeydown="handleAIEnter(event)"
+                ></textarea>
 
-        if (!response.ok) {
-            throw new Error(text);
+                <button onclick="sendAIMessage()">Send</button>
+            </div>
+        </div>
+    `);
+
+    setTimeout(() => {
+        const input = document.getElementById("aiMessageInput");
+        if (input) {
+            input.focus();
         }
+    }, 100);
+}
 
-        try {
-            return JSON.parse(text);
-        } catch (error) {
-            return { reply: text };
-        }
 
-    } catch (error) {
-        clearTimeout(timeoutId);
-        return getDemoAIResponse(message);
+function quickAIMessage(message) {
+    const input = document.getElementById("aiMessageInput");
+
+    if (input) {
+        input.value = message;
+        sendAIMessage();
     }
 }
+
+function handleAIEnter(event) {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendAIMessage();
+    }
+}
+
+async function sendAIMessage() {
+    const input = document.getElementById("aiMessageInput");
+    const chatBox = document.getElementById("aiChatBox");
+
+    if (!input || !chatBox) {
+        return;
+    }
+
+    const userMessage = input.value.trim();
+
+    if (!userMessage) {
+        return;
+    }
+
+    chatBox.innerHTML += `
+        <div class="user-message">
+            <strong>You:</strong> ${userMessage}
+        </div>
+    `;
+
+    input.value = "";
+
+    chatBox.innerHTML += `
+        <div class="ai-message" id="aiLoadingMessage">
+            <strong>KindConnect AI:</strong> Thinking...
+        </div>
+    `;
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    const aiResponse = await callKindConnectAI(userMessage);
+
+    const loadingMessage = document.getElementById("aiLoadingMessage");
+
+    if (loadingMessage) {
+        loadingMessage.remove();
+    }
+
+    chatBox.innerHTML += `
+        <div class="ai-message">
+            <strong>KindConnect AI:</strong> ${aiResponse.reply}
+        </div>
+    `;
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+
 
 function getDemoAIResponse(message) {
     const text = message.toLowerCase();
 
-    if (text.includes("hello") || text.includes("hi")) {
+    if (text.includes("hello") || text.includes("hi") || text.includes("hey")) {
         return {
             reply: "Hi! I’m your KindConnect AI assistant 💙 I can help with reminders, mood check-ins, resources, friendly calls, and volunteer support."
         };
@@ -304,6 +376,7 @@ function getDemoAIResponse(message) {
         reply: "I’m your KindConnect demo AI assistant 💙 I can help with reminders, mood check-ins, resources, food help, transportation, volunteer support, friendly calls, and tech help. What do you need today?"
     };
 }
+
 /* ===================== AUTH ===================== */
 
 function openRegister() {
@@ -594,97 +667,12 @@ async function completeReminder(id) {
 
 /* ===================== Dashboards ===================== */
 
-async function loadDashboardData() {
-    const dashboardTasks = document.getElementById("dashboardTasks");
-    dashboardTasks.innerHTML = "<p>Loading reminders...</p>";
-
-    try {
-        const response = await fetch(`${API}/api/reminders`);
-        const reminders = await response.json();
-
-        let html = "";
-
-        if (reminders.length === 0) {
-            dashboardTasks.innerHTML = `
-                <div class="task-row">
-                    <div class="task-icon">📭</div>
-
-                    <div>
-                        <strong>No tasks yet</strong><br>
-                        <small>Add a reminder to see it here.</small>
-                    </div>
-
-                    <span class="task-time">--</span>
-                    <span class="status-badge pending-badge">Pending</span>
-                </div>
-            `;
-            return;
-        }
-
-        reminders.forEach(reminder => {
-            let icon = "🔔";
-
-            if (reminder.type && reminder.type.toLowerCase().includes("medicine")) {
-                icon = "💊";
-            } else if (reminder.type && reminder.type.toLowerCase().includes("water")) {
-                icon = "💧";
-            } else if (reminder.type && reminder.type.toLowerCase().includes("appointment")) {
-                icon = "📅";
-            } else if (reminder.type && reminder.type.toLowerCase().includes("bill")) {
-                icon = "💵";
-            } else if (reminder.type && reminder.type.toLowerCase().includes("self")) {
-                icon = "💜";
-            }
-
-            const status = getReminderStatus(reminder);
-            const statusClass = getStatusClass(status);
-            const timeText = formatReminderTime(reminder.time);
-
-            if (status === "Completed") {
-                html += `
-                    <div class="task-row task-row-completed">
-                        <div class="task-icon completed-icon">${icon}</div>
-
-                        <div>
-                            <strong>${reminder.title}</strong><br>
-                            <small>${reminder.type || "Reminder"}</small>
-                        </div>
-
-                        <span class="task-time">${timeText}</span>
-
-                        <span class="status-badge ${statusClass}">
-                            ✅ ${status}
-                        </span>
-                    </div>
-                `;
-            } else {
-                html += `
-                    <div class="task-row clickable-task" onclick="confirmCompleteReminder(${reminder.id}, '${escapeText(reminder.title)}')">
-                        <div class="task-icon">${icon}</div>
-
-                        <div>
-                            <strong>${reminder.title}</strong><br>
-                            <small>${reminder.type || "Reminder"}</small>
-                        </div>
-
-                        <span class="task-time">${timeText}</span>
-
-                        <span class="status-badge ${statusClass}">
-                            ${status}
-                        </span>
-                    </div>
-                `;
-            }
-        });
-
-        dashboardTasks.innerHTML = html;
-
-    } catch (error) {
-        dashboardTasks.innerHTML = "<p>Backend is not running.</p>";
-    }
+function isReminderCompleted(reminder) {
+    return reminder.completed === true || reminder.completed === "true";
 }
+
 function getReminderStatus(reminder) {
-    if (reminder.completed === true) {
+    if (isReminderCompleted(reminder)) {
         return "Completed";
     }
 
@@ -730,6 +718,36 @@ function formatReminderTime(time) {
     return `${hour}:${minute} ${ampm}`;
 }
 
+function getReminderIcon(type) {
+    if (!type) {
+        return "🔔";
+    }
+
+    const cleanType = type.toLowerCase();
+
+    if (cleanType.includes("medicine")) {
+        return "💊";
+    }
+
+    if (cleanType.includes("water")) {
+        return "💧";
+    }
+
+    if (cleanType.includes("appointment")) {
+        return "📅";
+    }
+
+    if (cleanType.includes("bill")) {
+        return "💵";
+    }
+
+    if (cleanType.includes("self")) {
+        return "💜";
+    }
+
+    return "🔔";
+}
+
 function escapeText(text) {
     if (!text) {
         return "";
@@ -738,12 +756,110 @@ function escapeText(text) {
     return text.replace(/'/g, "\\'");
 }
 
+function buildReminderRow(reminder, completed) {
+    const icon = getReminderIcon(reminder.type);
+    const timeText = formatReminderTime(reminder.time);
+    const status = completed ? "Completed" : getReminderStatus(reminder);
+    const statusClass = getStatusClass(status);
+
+    if (completed) {
+        return `
+            <div class="task-row task-row-completed">
+                <div class="task-icon completed-icon">✅</div>
+
+                <div>
+                    <strong>${reminder.title}</strong><br>
+                    <small>${reminder.type || "Reminder"}</small>
+                </div>
+
+                <span class="task-time">${timeText}</span>
+
+                <span class="status-badge ${statusClass}">
+                    Completed
+                </span>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="task-row clickable-task" onclick="confirmCompleteReminder(${reminder.id}, '${escapeText(reminder.title)}')">
+            <div class="task-icon">${icon}</div>
+
+            <div>
+                <strong>${reminder.title}</strong><br>
+                <small>${reminder.type || "Reminder"}</small>
+            </div>
+
+            <span class="task-time">${timeText}</span>
+
+            <span class="status-badge ${statusClass}">
+                ${status}
+            </span>
+        </div>
+    `;
+}
+
+async function loadDashboardData() {
+    const dashboardTasks = document.getElementById("dashboardTasks");
+    dashboardTasks.innerHTML = "<p>Loading reminders...</p>";
+
+    try {
+        const response = await fetch(`${API}/api/reminders`);
+        const reminders = await response.json();
+
+        if (!reminders || reminders.length === 0) {
+            dashboardTasks.innerHTML = `
+                <div class="task-row">
+                    <div class="task-icon">📭</div>
+                    <div>
+                        <strong>No tasks yet</strong><br>
+                        <small>Add a reminder to see it here.</small>
+                    </div>
+                    <span class="task-time">--</span>
+                    <span class="status-badge pending-badge">Pending</span>
+                </div>
+            `;
+            return;
+        }
+
+        // Order: Pending first, then Upcoming, then Completed
+        const pendingTasks = reminders.filter(reminder =>
+            !isReminderCompleted(reminder) && getReminderStatus(reminder) === "Pending"
+        );
+
+        const upcomingTasks = reminders.filter(reminder =>
+            !isReminderCompleted(reminder) && getReminderStatus(reminder) === "Upcoming"
+        );
+
+        const completedTasks = reminders.filter(reminder => isReminderCompleted(reminder));
+
+        let html = "";
+
+        pendingTasks.forEach(reminder => {
+            html += buildReminderRow(reminder, false);
+        });
+
+        upcomingTasks.forEach(reminder => {
+            html += buildReminderRow(reminder, false);
+        });
+
+        completedTasks.forEach(reminder => {
+            html += buildReminderRow(reminder, true);
+        });
+
+        dashboardTasks.innerHTML = html;
+
+    } catch (error) {
+        dashboardTasks.innerHTML = "<p>Backend is not running.</p>";
+    }
+}
+
 function confirmCompleteReminder(id, title) {
     openModal("Complete Task", `
         <div class="info-card">
             <h3>✅ Did you complete this task?</h3>
             <p><strong>${title}</strong></p>
-            <p>Tap the button below if you finished this task.</p>
+            <p>Tap complete if you finished it.</p>
 
             <button class="modal-action" onclick="completeReminderFromDashboard(${id})">
                 Yes, Complete Task
@@ -763,7 +879,10 @@ async function completeReminderFromDashboard(id) {
         });
 
         closeModal();
-        loadDashboardData();
+
+        setTimeout(() => {
+            loadDashboardData();
+        }, 300);
 
     } catch (error) {
         alert("Could not complete task. Make sure backend is running.");
@@ -1332,3 +1451,7 @@ async function openVolunteerSupportList() {
 /* Run when page loads */
 setDashboardDate();
 loadDashboardData();
+
+setInterval(() => {
+    setDashboardDate();
+}, 1000);
