@@ -21,6 +21,8 @@ Save mood check-ins
 
 View mood history
 
+Ask AI for help and guidance 
+
 Project Overview
 
 KindConnect is a community support web application that helps people manage daily reminders,
