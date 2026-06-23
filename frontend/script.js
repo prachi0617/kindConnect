@@ -208,7 +208,7 @@ function openSettings() {
 /* ===================== AI CHAT ===================== */
 
 function openAIChat() {
-    openModal("KindConnect AI Assistant", `
+    openModal("Kindly AI Assistant", `
         <div class="ai-chat-wrapper">
             <div class="ai-chat-header">
                 <div class="ai-chat-icon">🤖</div>
@@ -217,8 +217,8 @@ function openAIChat() {
 
             <div class="ai-conversation" id="aiChatBox">
                 <div class="chat-message bot-chat">
-                    <strong>KindConnect AI:</strong><br>
-                    Hi! I am your KindConnect assistant ! How can I help you today?
+                    <strong>Kindly AI Assistant:</strong><br>
+                    Hi! I am your Kindly assistant ! How can I help you today?
                 </div>
             </div>
 
