@@ -1,4 +1,4 @@
-KindConnect Backend
+KindConnect 
 
 KindConnect is a community support web application built with Java Spring Boot. The project helps users manage daily reminders, record mood check-ins, and find helpful community resources such as food, healthcare, transportation, and community services.
 
