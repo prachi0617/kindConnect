@@ -207,6 +207,8 @@ function openSettings() {
 
 /* ===================== AI CHAT ===================== */
 
+/* =================== AI CHAT ===================== */
+
 function openAIChat() {
     openModal("Kindly AI Assistant", `
         <div class="ai-chat-wrapper">
@@ -217,7 +219,7 @@ function openAIChat() {
             <div class="ai-conversation" id="aiChatBox">
                 <div class="chat-message bot-chat">
                     <strong>Kindly AI Assistant:</strong><br>
-                    Hi! I am your Kindly assistant ! How can I help you today?
+                    Hi! I am your Kindly assistant! How can I help you today?
                 </div>
             </div>
 
@@ -251,7 +253,6 @@ function openAIChat() {
 
 function quickAIMessage(message) {
     const input = document.getElementById("aiMessageInput");
-
     if (input) {
         input.value = message;
         sendAIMessage();
@@ -269,16 +270,12 @@ async function sendAIMessage() {
     const input = document.getElementById("aiMessageInput");
     const chatBox = document.getElementById("aiChatBox");
 
-    if (!input || !chatBox) {
-        return;
-    }
+    if (!input || !chatBox) return;
 
     const userMessage = input.value.trim();
+    if (!userMessage) return;
 
-    if (!userMessage) {
-        return;
-    }
-
+    // Show user message
     chatBox.innerHTML += `
         <div class="user-message">
             <strong>You:</strong> ${userMessage}
@@ -287,45 +284,89 @@ async function sendAIMessage() {
 
     input.value = "";
 
+    // Show loading indicator
     chatBox.innerHTML += `
         <div class="ai-message" id="aiLoadingMessage">
-            <strong>KindConnect AI:</strong> Thinking...
+            <strong>Kindly AI:</strong> Thinking...
         </div>
     `;
-
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    const aiResponse = await callKindConnectAI(userMessage);
-
-    const loadingMessage = document.getElementById("aiLoadingMessage");
-
-    if (loadingMessage) {
-        loadingMessage.remove();
+    // Call the AI and handle errors gracefully
+    let aiResponse;
+    try {
+        aiResponse = await callKindConnectAI(userMessage);
+    } catch (err) {
+        console.error("AI error:", err);
+        aiResponse = { reply: "I'm sorry, I had a little trouble connecting 💙 Please try again in a moment." };
     }
 
+    // Remove loading indicator
+    const loadingMessage = document.getElementById("aiLoadingMessage");
+    if (loadingMessage) loadingMessage.remove();
+
+    // Show AI response
     chatBox.innerHTML += `
         <div class="ai-message">
-            <strong>KindConnect AI:</strong> ${aiResponse.reply}
+            <strong>Kindly AI:</strong> ${aiResponse.reply}
         </div>
     `;
-
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 
+/* ---------- Real Claude API Call ---------- */
+
+async function callKindConnectAI(userMessage) {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            model: "claude-sonnet-4-6",
+            max_tokens: 1000,
+            system: `You are Kindly, a warm and compassionate AI assistant designed to help elderly 
+and vulnerable users. You help with:
+- Medicine and appointment reminders (guide them to Daily Reminders)
+- Mood support and friendly conversation (empathetic, never dismissive)
+- Food resources (guide them to Community Resources > Food)
+- Transportation / ride help (guide them to Resources > Rides)
+- Volunteer requests (Friendly Call, Grocery Help, Ride Help, Tech Help)
+- Tech support (guide them to Community Resources > Tech Help)
+
+Keep your replies short, warm, and easy to read. Use simple language. 
+Add a caring emoji occasionally (💙 💜 😊). Never give medical advice.`,
+            messages: [
+                { role: "user", content: userMessage }
+            ]
+        })
+    });
+
+    if (!response.ok) {
+        // Fall back to demo responses if API fails
+        return getDemoAIResponse(userMessage);
+    }
+
+    const data = await response.json();
+    return { reply: data.content[0].text };
+}
+
+
+/* ---------- Fallback Demo Responses (used if API is unavailable) ---------- */
 
 function getDemoAIResponse(message) {
     const text = message.toLowerCase();
 
     if (text.includes("hello") || text.includes("hi") || text.includes("hey")) {
         return {
-            reply: "Hi! I’m your KindConnect AI assistant 💙 I can help with reminders, mood check-ins, resources, friendly calls, and volunteer support."
+            reply: "Hi! I'm your KindConnect AI assistant 💙 I can help with reminders, mood check-ins, resources, friendly calls, and volunteer support."
         };
     }
 
     if (text.includes("sad") || text.includes("lonely") || text.includes("depressed")) {
         return {
-            reply: "I’m sorry you’re feeling this way 💙 You are not alone. You can do a mood check-in, listen to calming music, or request a friendly call."
+            reply: "I'm sorry you're feeling this way 💙 You are not alone. You can do a mood check-in, listen to calming music, or request a friendly call."
         };
     }
 
@@ -355,7 +396,7 @@ function getDemoAIResponse(message) {
 
     if (text.includes("volunteer")) {
         return {
-            reply: "That’s wonderful 💜 Click Become a Volunteer and choose how you want to help, such as Friendly Call, Grocery Help, Ride Help, or Tech Help."
+            reply: "That's wonderful 💜 Click Become a Volunteer and choose how you want to help, such as Friendly Call, Grocery Help, Ride Help, or Tech Help."
         };
     }
 
@@ -372,10 +413,9 @@ function getDemoAIResponse(message) {
     }
 
     return {
-        reply: "I’m your KindConnect demo AI assistant 💙 I can help with reminders, mood check-ins, resources, food help, transportation, volunteer support, friendly calls, and tech help. What do you need today?"
+        reply: "I'm your KindConnect AI assistant 💙 I can help with reminders, mood check-ins, resources, food help, transportation, volunteer support, friendly calls, and tech help. What do you need today?"
     };
 }
-
 /* ===================== AUTH ===================== */
 
 function openRegister() {
