@@ -264,54 +264,9 @@ function handleAIEnter(event) {
     }
 }
 
-async function sendAIMessage() {
-    const input = document.getElementById("aiMessageInput");
-    const chatBox = document.getElementById("aiChatBox");
-
-    if (!input || !chatBox) {
-        return;
-    }
-
-    const userMessage = input.value.trim();
-
-    if (!userMessage) {
-        return;
-    }
-
-    chatBox.innerHTML += `
-        <div class="user-message">
-            <strong>You:</strong> ${userMessage}
-        </div>
-    `;
-
-    input.value = "";
-
-    chatBox.innerHTML += `
-        <div class="ai-message" id="aiLoadingMessage">
-            <strong>KindConnect AI:</strong> Thinking...
-        </div>
-    `;
-
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    const aiResponse = await callKindConnectAI(userMessage);
-
-    const loadingMessage = document.getElementById("aiLoadingMessage");
-
-    if (loadingMessage) {
-        loadingMessage.remove();
-    }
-
-    chatBox.innerHTML += `
-        <div class="ai-message">
-            <strong>KindConnect AI:</strong> ${aiResponse.reply}
-        </div>
-    `;
-
-    chatBox.scrollTop = chatBox.scrollHeight;
+async function callKindConnectAI(message) {
+    return getDemoAIResponse(message);
 }
-
-
 
 function getDemoAIResponse(message) {
     const text = message.toLowerCase();
@@ -371,7 +326,7 @@ function getDemoAIResponse(message) {
     }
 
     return {
-        reply: "I’m your KindConnect demo AI assistant 💙 I can help with reminders, mood check-ins, resources, food help, transportation, volunteer support, friendly calls, and tech help. What do you need today?"
+        reply: "I’m your KindConnect demo AI assistant 💙 I can help with reminders, mood check-ins, food help, rides, volunteers, friendly calls, and tech help. What do you need today?"
     };
 }
 
