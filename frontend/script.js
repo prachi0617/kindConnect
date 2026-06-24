@@ -223,13 +223,7 @@ function openAIChat() {
                 </div>
             </div>
 
-            <div class="ai-quick-buttons">
-                <button onclick="quickAIMessage('I need help with medicine reminder')">💊 Medicine</button>
-                <button onclick="quickAIMessage('I feel lonely today')">💜 Mood</button>
-                <button onclick="quickAIMessage('I need food resources')">🍏 Food</button>
-                <button onclick="quickAIMessage('I need a ride')">🚗 Ride</button>
-            </div>
-
+            
             <div class="ai-input-row">
                 <textarea 
                     id="aiMessageInput" 
