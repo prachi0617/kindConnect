@@ -266,7 +266,7 @@ function handleAIEnter(event) {
     }
 }
 
-async function sendAIMessage() {
+function sendAIMessage() {
     const input = document.getElementById("aiMessageInput");
     const chatBox = document.getElementById("aiChatBox");
 
@@ -283,139 +283,105 @@ async function sendAIMessage() {
     `;
 
     input.value = "";
-
-    // Show loading indicator
-    chatBox.innerHTML += `
-        <div class="ai-message" id="aiLoadingMessage">
-            <strong>Kindly AI:</strong> Thinking...
-        </div>
-    `;
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // Call the AI and handle errors gracefully
-    let aiResponse;
-    try {
-        aiResponse = await callKindConnectAI(userMessage);
-    } catch (err) {
-        console.error("AI error:", err);
-        aiResponse = { reply: "I'm sorry, I had a little trouble connecting 💙 Please try again in a moment." };
-    }
+    // Small delay to feel natural
+    setTimeout(() => {
+        const aiResponse = getDemoAIResponse(userMessage);
 
-    // Remove loading indicator
-    const loadingMessage = document.getElementById("aiLoadingMessage");
-    if (loadingMessage) loadingMessage.remove();
+        chatBox.innerHTML += `
+            <div class="ai-message">
+                <strong>Kindly AI:</strong> ${aiResponse.reply}
+            </div>
+        `;
 
-    // Show AI response
-    chatBox.innerHTML += `
-        <div class="ai-message">
-            <strong>Kindly AI:</strong> ${aiResponse.reply}
-        </div>
-    `;
-    chatBox.scrollTop = chatBox.scrollHeight;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }, 600);
 }
 
 
-/* ---------- Real Claude API Call ---------- */
-
-async function callKindConnectAI(userMessage) {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            model: "claude-sonnet-4-6",
-            max_tokens: 1000,
-            system: `You are Kindly, a warm and compassionate AI assistant designed to help elderly 
-and vulnerable users. You help with:
-- Medicine and appointment reminders (guide them to Daily Reminders)
-- Mood support and friendly conversation (empathetic, never dismissive)
-- Food resources (guide them to Community Resources > Food)
-- Transportation / ride help (guide them to Resources > Rides)
-- Volunteer requests (Friendly Call, Grocery Help, Ride Help, Tech Help)
-- Tech support (guide them to Community Resources > Tech Help)
-
-Keep your replies short, warm, and easy to read. Use simple language. 
-Add a caring emoji occasionally (💙 💜 😊). Never give medical advice.`,
-            messages: [
-                { role: "user", content: userMessage }
-            ]
-        })
-    });
-
-    if (!response.ok) {
-        // Fall back to demo responses if API fails
-        return getDemoAIResponse(userMessage);
-    }
-
-    const data = await response.json();
-    return { reply: data.content[0].text };
-}
-
-
-/* ---------- Fallback Demo Responses (used if API is unavailable) ---------- */
+/* ---------- Local AI Responses ---------- */
 
 function getDemoAIResponse(message) {
     const text = message.toLowerCase();
 
     if (text.includes("hello") || text.includes("hi") || text.includes("hey")) {
         return {
-            reply: "Hi! I'm your KindConnect AI assistant 💙 I can help with reminders, mood check-ins, resources, friendly calls, and volunteer support."
+            reply: "Hi there! I'm your Kindly assistant 💙 I can help with reminders, mood check-ins, food resources, rides, and volunteer support. What do you need today?"
         };
     }
 
-    if (text.includes("sad") || text.includes("lonely") || text.includes("depressed")) {
+    if (text.includes("sad") || text.includes("lonely") || text.includes("depressed") || text.includes("alone")) {
         return {
-            reply: "I'm sorry you're feeling this way 💙 You are not alone. You can do a mood check-in, listen to calming music, or request a friendly call."
+            reply: "I'm sorry you're feeling this way 💙 You are not alone. You can do a mood check-in, listen to calming music, or request a friendly call from a volunteer. We are here for you!"
         };
     }
 
-    if (text.includes("medicine") || text.includes("medication") || text.includes("pill")) {
+    if (text.includes("medicine") || text.includes("medication") || text.includes("pill") || text.includes("drug")) {
         return {
-            reply: "I can help with medicine reminders. Click Daily Reminders, choose Medicine, add the date and time, and it will show on your dashboard."
+            reply: "I can help with medicine reminders! 💊 Click on Daily Reminders, choose Medicine, add the date and time, and it will show up on your dashboard automatically."
         };
     }
 
-    if (text.includes("appointment") || text.includes("doctor")) {
+    if (text.includes("appointment") || text.includes("doctor") || text.includes("clinic") || text.includes("hospital")) {
         return {
-            reply: "I can help with appointment reminders. Add the appointment date and time, and the dashboard will show it as Pending, Upcoming, or Completed."
+            reply: "I can help with appointment reminders! 🏥 Go to Daily Reminders and add your appointment date and time. Your dashboard will show it as Pending, Upcoming, or Completed."
         };
     }
 
-    if (text.includes("food") || text.includes("grocery") || text.includes("hungry")) {
+    if (text.includes("food") || text.includes("grocery") || text.includes("hungry") || text.includes("eat") || text.includes("meal")) {
         return {
-            reply: "I can help you find food support. Open Community Resources and choose Food. You can also request Grocery Help from a volunteer."
+            reply: "I can help you find food support! 🍏 Open Community Resources and choose Food. You can also request Grocery Help from a volunteer near you."
         };
     }
 
-    if (text.includes("ride") || text.includes("transportation")) {
+    if (text.includes("ride") || text.includes("transportation") || text.includes("drive") || text.includes("car") || text.includes("travel")) {
         return {
-            reply: "For transportation support, open Resources and choose Rides. You can also submit a Ride Help request."
+            reply: "For transportation support 🚗 open Community Resources and choose Rides. You can also submit a Ride Help request and a volunteer will assist you."
         };
     }
 
     if (text.includes("volunteer")) {
         return {
-            reply: "That's wonderful 💜 Click Become a Volunteer and choose how you want to help, such as Friendly Call, Grocery Help, Ride Help, or Tech Help."
+            reply: "That's wonderful 💜 Click Become a Volunteer and choose how you'd like to help — options include Friendly Call, Grocery Help, Ride Help, or Tech Help. Thank you for giving back!"
         };
     }
 
-    if (text.includes("tech") || text.includes("computer") || text.includes("laptop")) {
+    if (text.includes("tech") || text.includes("computer") || text.includes("laptop") || text.includes("phone") || text.includes("internet")) {
         return {
-            reply: "For tech support, choose Tech Help in Community Resources. You can also request help from a volunteer."
+            reply: "For tech support 💻 open Community Resources and choose Tech Help. You can also request help from a volunteer who will guide you step by step."
         };
     }
 
-    if (text.includes("reminder") || text.includes("task")) {
+    if (text.includes("reminder") || text.includes("task") || text.includes("schedule") || text.includes("alarm")) {
         return {
-            reply: "You can add a reminder from Daily Reminders. After saving it, the dashboard will show the task with time and status."
+            reply: "You can add a reminder from Daily Reminders! ⏰ After saving it, your dashboard will show the task with its time and status (Pending, Upcoming, or Completed)."
+        };
+    }
+
+    if (text.includes("thank") || text.includes("thanks") || text.includes("thank you")) {
+        return {
+            reply: "You're so welcome! 😊 I'm always here whenever you need help. Take care and have a wonderful day! 💙"
+        };
+    }
+
+    if (text.includes("help") || text.includes("what can you do") || text.includes("how")) {
+        return {
+            reply: "I'm here to help you with many things! 💙 Here's what I can do:<br><br>💊 Medicine reminders<br>📅 Appointment reminders<br>🍏 Food resources<br>🚗 Ride help<br>💜 Mood check-ins<br>💻 Tech support<br>🤝 Volunteer requests<br><br>Just tell me what you need!"
+        };
+    }
+
+    if (text.includes("bye") || text.includes("goodbye") || text.includes("see you")) {
+        return {
+            reply: "Goodbye! 👋 Take care of yourself and don't hesitate to come back anytime you need help. We're always here for you 💙"
         };
     }
 
     return {
-        reply: "I'm your KindConnect AI assistant 💙 I can help with reminders, mood check-ins, resources, food help, transportation, volunteer support, friendly calls, and tech help. What do you need today?"
+        reply: "I'm your Kindly assistant 💙 I can help with reminders, mood check-ins, food resources, rides, tech support, and volunteer requests. Could you tell me a little more about what you need?"
     };
 }
+
 /* ===================== AUTH ===================== */
 
 function openRegister() {
