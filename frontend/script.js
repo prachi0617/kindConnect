@@ -216,11 +216,10 @@ function openAIChat() {
                 
             </div>
 
-            <div class="ai-conversation" id="aiChatBox">
-                <div class="chat-message bot-chat">
+            <div class="ai-conversation">
+
                     <strong>Kindly AI Assistant:</strong><br>
                     Hi! I am your Kindly assistant! How can I help you today?
-                </div>
             </div>
 
             
